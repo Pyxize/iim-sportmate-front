@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Button, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
-import {Colors} from '../../assets/styles/colors'
+import {Colors} from '../../../assets/styles/colors'
 import {
     Logo,
     PageTitle,
@@ -9,7 +9,7 @@ import {
     Buttontext,
     WrappedView,
     SafeAreaWrapped
-} from "../../assets/styles/styles";
+} from "../../../assets/styles/styles";
 import {Link} from "react-router-native";
 
 const Welcome = () => {
@@ -18,7 +18,7 @@ const Welcome = () => {
         <SafeAreaWrapped background={Colors.secondary}>
             <StyledContainer>
                 <WrappedView>
-                    <Logo resizeMode="cover" source={require('../../assets/img/SportMate_White.png')}></Logo>
+                    <Logo resizeMode="cover" source={require('../../../assets/img/SportMate_White.png')}></Logo>
                 </WrappedView>
 
                 <WrappedView>

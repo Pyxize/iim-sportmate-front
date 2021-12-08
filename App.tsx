@@ -11,13 +11,13 @@ import {
   //useColorScheme,
   //View,
 } from 'react-native';
-import Form from './app/components/form/Form';
-import Welcome from './app/components/start/Welcome'
+import Form from './app/src/components/login/form/Form';
+import Welcome from './app/src/page/start/Welcome'
 import {Colors} from "./app/assets/styles/colors";
 import {SafeAreaWrapped} from "./app/assets/styles/styles";
 import {NativeRouter, Route, Routes, Switch} from "react-router-native";
-import Register from "./app/components/register/Register";
-import Signin from "./app/components/signin/Signin";
+import Register from "./app/src/page/login/register/Register";
+import Signin from "./app/src/page/login/signin/Signin";
 
 /*
 import {

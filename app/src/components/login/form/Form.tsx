@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Controller, useForm } from "react-hook-form"
 import {Text, View, TextInput, Button, Alert, StyleSheet, Pressable} from "react-native";
-import {Colors} from '../../assets/styles/colors'
+import {Colors} from '../../../../assets/styles/colors'
 import {Link} from "react-router-native";
-import {Buttontext, PrimaryButton, StyledContainer, WrappedView} from "../../assets/styles/styles";
+import {Buttontext, PrimaryButton, StyledContainer, WrappedView} from "../../../../assets/styles/styles";
 
 
 type FormData = {
