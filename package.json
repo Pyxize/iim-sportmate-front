@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-picker/picker": "^2.2.1",
     "@react-navigation/native": "^6.0.6",
+    "axios": "^0.24.0",
     "expo": "^43.0.3",
     "react": "17.0.2",
     "react-datepicker": "^4.5.0",

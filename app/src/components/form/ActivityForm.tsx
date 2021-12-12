@@ -2,27 +2,38 @@ import { Controller, useForm } from "react-hook-form"
 import { Text, View, TextInput, Button, Alert, StyleSheet, Pressable } from "react-native";
 import { Colors } from '../../../assets/styles/colors'
 import { Buttontext, PrimaryButton, StyledContainer, WrappedView } from "../../../assets/styles/styles";
-import PhoneInput from "react-native-phone-number-input";
 import React, { useState, useRef } from 'react';
 import DatePicker from 'react-native-datepicker';
 import RNPickerSelect from "react-native-picker-select";
-
+import axios from 'axios';
 
 type FormData = {
-    eventName: string;
+    activityName: string;
     description: string;
     sport: string;
-    level: string;
+    activityLevel: string;
     activityDate: string;
-    place: string;
-    participantMax: string;
+    address: string;
+    participant: string;
     contact: string;
 }
 
 const Form = () => {
     const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
     const onSubmit = (data: any) => {
-        console.log(data)
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2MzkzMzAyODAsImV4cCI6MTYzOTMzMDg4MH0.OSxpBaIbIo_bwx0KUCWfP7H-uporc5tcHhXSOtywTVhag-m2dUenlSSW8zI8V7AUnb6SBeGEUNJKUkd3yejytg`
+        };
+        
+        console.log(data);
+        axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, {
+            headers: headers
+          })
+             .then(res => {
+                console.log(res);
+                console.log(res.data);
+            })
     }
     const [date, setDate] = useState(new Date());
     const [itemLevel, setItemLevel] = useState([
@@ -54,7 +65,7 @@ const Form = () => {
                             value={value}
                         />
                     )}
-                    name="eventName"
+                    name="activityName"
                 />
 
                 <Text style={styles.FormLabel}>Description: </Text>
@@ -105,9 +116,9 @@ const Form = () => {
                             style={{ ...pickerSelectStyles }}
                         />
                     )}
-                    name="level"
+                    name="activityLevel"
                 />
-                {errors.level && <Text style={styles.error}>Le niveau est obligatoire</Text>}
+                {errors.activityLevel && <Text style={styles.error}>Le niveau est obligatoire</Text>}
 
                 <Text style={styles.FormLabel}>Date: </Text>
                 <Controller
@@ -122,7 +133,7 @@ const Form = () => {
                             date={date}
                             mode="date"
                             minDate={new Date()}
-                            format="DD-MM-YYYY"
+                            format="YYYY-MM-DD"
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
@@ -165,9 +176,9 @@ const Form = () => {
                             value={value}
                         />
                     )}
-                    name="place"
+                    name="address"
                 />
-                {errors.place && <Text style={styles.error}>Le lieu est obligatoire</Text>}
+                {errors.address && <Text style={styles.error}>Le lieu est obligatoire</Text>}
 
 
                 <Text style={styles.FormLabel}>Nombre de participant maximal: </Text>
@@ -185,7 +196,7 @@ const Form = () => {
                             value={value}
                         />
                     )}
-                    name="participantMax"
+                    name="participant"
                 />
 
 
