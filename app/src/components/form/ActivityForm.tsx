@@ -30,7 +30,8 @@ const Form = () => {
     const [showMessage, setShowMessage] = useState(false);
     const contact = useRef<PhoneInput>(null);
     const [open, setOpen] = useState(false);
-    const [items, setItems] = useState([
+    const [valueLevel, setValueLeve] = useState(null);
+    const [itemLevel, setItemLevel] = useState([
       {label: 'Débutant', value: 'Débutant'},
       {label: 'Intérmediaire', value: 'Intérmediaire'},
       {label: 'Expert', value: 'expert'}
@@ -105,11 +106,11 @@ const Form = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                     <DropDownPicker
                     open={open}
-                    value={value}
-                    items={items}
+                    value={valueLevel}
+                    items={itemLevel}
                     setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
+                    setValue={setValueLeve}
+                    setItems={setItemLevel}
                     />
                 )}
                 name="level"
