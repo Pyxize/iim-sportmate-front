@@ -1,13 +1,11 @@
-
 import { Controller, useForm } from "react-hook-form"
 import { Text, View, TextInput, Button, Alert, StyleSheet, Pressable } from "react-native";
 import { Colors } from '../../../assets/styles/colors'
-import { Link } from "react-router-native";
 import { Buttontext, PrimaryButton, StyledContainer, WrappedView } from "../../../assets/styles/styles";
 import PhoneInput from "react-native-phone-number-input";
 import React, { useState, useRef } from 'react';
 import DatePicker from 'react-native-datepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
+import RNPickerSelect from "react-native-picker-select";
 
 
 type FormData = {
@@ -23,27 +21,20 @@ type FormData = {
 
 const Form = () => {
     const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
-    const onSubmit = (data: any) => console.log(data);
-    const [activityDate, setDate] = useState('09-10-2020');
-    const [value, setValue] = useState("");
-    const [valid, setValid] = useState(false);
-    const [showMessage, setShowMessage] = useState(false);
-    const contact = useRef<PhoneInput>(null);
-    const [openLevel, setOpenLevel] = useState(false);
-    const [openSport, setOpenSport] = useState(false);
-    const [valueLevel, setValueLevel] = useState(null);
+    const onSubmit = (data: any) => {
+        console.log(data)
+    }
+    const [date, setDate] = useState(new Date());
     const [itemLevel, setItemLevel] = useState([
         { label: 'Débutant', value: 'Débutant' },
         { label: 'Intérmediaire', value: 'Intérmediaire' },
         { label: 'Expert', value: 'expert' }
     ]);
-    const [valueSport, setValueSport] = useState(null);
     const [itemSport, setItemSport] = useState([
         { label: 'Course', value: 'Course' },
         { label: 'Natation', value: 'Natation' },
         { label: 'Vélo', value: 'Vélo' }
     ]);
-
 
     return (
         <View>
@@ -70,8 +61,7 @@ const Form = () => {
                 <Controller
                     control={control}
                     rules={{
-                        required: true,
-                        maxLength: 10
+                        required: false
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
@@ -88,47 +78,36 @@ const Form = () => {
                 <Controller
                     control={control}
                     rules={{
-                        required: true,
-                        maxLength: 10
+                        required: true
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                        <DropDownPicker
-                            style={styles.dropdown}
-                            open={openSport}
-                            value={valueSport}
+                        <RNPickerSelect
+                            onValueChange={onChange}
                             items={itemSport}
-                            setOpen={setOpenSport}
-                            setValue={setValueSport}
-                            setItems={setItemSport}
+                            style={{ ...pickerSelectStyles }}
                         />
                     )}
                     name="sport"
                 />
-
+                {errors.sport && <Text style={styles.error}>Le sport est obligatoire</Text>}
 
 
                 <Text style={styles.FormLabel}>Niveau: </Text>
                 <Controller
                     control={control}
                     rules={{
-                        required: true,
-                        maxLength: 10
+                        required: true
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                        <DropDownPicker
-                            style={styles.dropdown}
-                            open={openLevel}
-                            value={valueLevel}
+                        <RNPickerSelect
+                            onValueChange={onChange}
                             items={itemLevel}
-                            setOpen={setOpenLevel}
-                            setValue={setValueLevel}
-                            setItems={setItemLevel}
+                            style={{ ...pickerSelectStyles }}
                         />
                     )}
                     name="level"
                 />
-
-
+                {errors.level && <Text style={styles.error}>Le niveau est obligatoire</Text>}
 
                 <Text style={styles.FormLabel}>Date: </Text>
                 <Controller
@@ -139,7 +118,8 @@ const Form = () => {
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <DatePicker style={styles.datePickerStyle}
-                            date={activityDate}
+                            onDateChange={onChange}
+                            date={date}
                             mode="date"
                             minDate={new Date()}
                             format="DD-MM-YYYY"
@@ -151,10 +131,10 @@ const Form = () => {
                                 },
                                 dateText: {
                                     color: '#F8F8FF',
-marginLeft: 10,
+                                    marginLeft: 10,
 
-        alignSelf: 'flex-start'
-                                
+                                    alignSelf: 'flex-start'
+
                                 },
                                 dateInput: {
                                     borderLeftWidth: 0,
@@ -165,24 +145,17 @@ marginLeft: 10,
                                 }
 
                             }}
-                            onDateChange={(activityDate) => {
-                                setDate(activityDate);
-                            }}
                         />
                     )}
-                    name="level"
+                    name="activityDate"
                 />
-
-
-
-
+                {errors.activityDate && <Text style={styles.error}>La date est obligatoire</Text>}
 
                 <Text style={styles.FormLabel}>Lieu: </Text>
                 <Controller
                     control={control}
                     rules={{
-                        required: true,
-                        maxLength: 10
+                        required: true
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
@@ -194,13 +167,14 @@ marginLeft: 10,
                     )}
                     name="place"
                 />
+                {errors.place && <Text style={styles.error}>Le lieu est obligatoire</Text>}
+
 
                 <Text style={styles.FormLabel}>Nombre de participant maximal: </Text>
                 <Controller
                     control={control}
                     rules={{
-                        required: true,
-                        maxLength: 10
+                        required: false
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
@@ -214,24 +188,14 @@ marginLeft: 10,
                     name="participantMax"
                 />
 
-                <Text style={styles.FormLabel}>Contact: </Text>
-                {/* <PhoneInput
-                    ref={contact}
-                    defaultValue={value}
-                    defaultCode="IN"
-                    onChangeFormattedText={(text) => {
-                    setValue(text);
-                    }}
-                    withDarkTheme
-                    withShadow
-                    autoFocus
-                /> */}
 
+                <Text style={styles.FormLabel}>Numéro de téléphone: </Text>
                 <Controller
                     control={control}
                     rules={{
                         required: false,
-                        maxLength: 10
+                        maxLength: 10,
+                        minLength: 10
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
@@ -244,15 +208,14 @@ marginLeft: 10,
                     )}
                     name="contact"
                 />
-
-                {errors.contact && <Text>Vous devez renter un numéro de téléphone portable</Text>}
+                {errors.contact && <Text style={styles.error}>10 caractères numérics attendus</Text>}
 
             </View>
             <WrappedView style={{ marginLeft: 64, marginRight: 64 }}>
                 <PrimaryButton onPress={handleSubmit(onSubmit)}>
-                    <Link to="/signin">
-                        <Buttontext>Sauvegarder</Buttontext>
-                    </Link>
+                    {/* <Link to="/signin"> */}
+                    <Buttontext>Sauvegarder</Buttontext>
+                    {/* </Link> */}
                 </PrimaryButton>
             </WrappedView>
         </View>
@@ -263,6 +226,12 @@ const styles = StyleSheet.create({
     FormLabel: {
         marginLeft: 16,
         color: '#fff',
+        fontWeight: 'bold'
+    },
+    error: {
+        marginBottom: 16,
+        marginLeft: 20,
+        color: Colors.primary,
         fontWeight: 'bold'
     },
     input: {
@@ -304,9 +273,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: 'transparent',
         color: '#fff',
-    },
-    dropdown: {
-        marginRight: 16,
+    }
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        margin: 16,
         height: 40,
         borderWidth: 1,
         borderColor: Colors.primary,
@@ -314,6 +286,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: 'transparent',
         color: '#fff'
-    }
+    },
 });
+
 export default Form;
