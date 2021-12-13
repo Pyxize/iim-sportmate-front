@@ -3,7 +3,6 @@ import {Controller, SubmitErrorHandler, SubmitHandler, useForm} from "react-hook
 import {Text, View, TextInput, Button, Alert, StyleSheet, Pressable} from "react-native";
 import {Colors} from '../../../../assets/styles/colors'
 import {Buttontext, PrimaryButton, StyledContainer, WrappedView} from "../../../../assets/styles/styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useNavigation} from "@react-navigation/native";
 import AuthService from '../../../services/auth.service'
 import axios from "axios";

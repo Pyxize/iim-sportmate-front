@@ -11,11 +11,8 @@ import {
     SafeAreaWrapped
 } from "../../../assets/styles/styles";
 
-
 const Welcome = ({ navigation }) => {
-
-
-    return(
+    return (
         <SafeAreaWrapped background={Colors.secondary}>
             <StyledContainer>
                 <WrappedView>
@@ -24,7 +21,7 @@ const Welcome = ({ navigation }) => {
 
                 <WrappedView>
                     <PageTitle>Bienvenue sur SportMate !</PageTitle>
-                    <Text style={styles.text}>Amuse-to et crée ton cercle de sportifs</Text>
+                    <Text style={styles.text}>Amuse-toi et crée ton cercle de sportifs</Text>
                     <Text style={styles.text}>Nous te proposons de rejoindre un ou des partenaire(s) de sport le temps d’une séance.</Text>
                 </WrappedView>
 

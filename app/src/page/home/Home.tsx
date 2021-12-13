@@ -8,13 +8,8 @@ import AuthService from '../../services/auth.service'
 // @ts-ignore
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect, useState} from "react";
-import {get, set} from "react-hook-form";
-
-
 
 const Home = ({navigation}) => {
-
-
     const [item, setItem] = useState(null);
     //const [user, setUser] = useState(null)
 
@@ -31,5 +26,4 @@ const Home = ({navigation}) => {
         </WrappedView>
     )
 }
-
 export default Home;

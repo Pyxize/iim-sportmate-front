@@ -11,12 +11,12 @@ const Signin = ({navigation}) => {
     return(
         <SafeAreaWrapped>
             <ImageBackground source={Bg} resizeMode="cover" style={styles.image}>
-           <StyledContainer justifyContent="center">
+            <StyledContainer justifyContent="center">
                <WrappedView>
                    <Logo resizeMode="cover" source={require('../../../../assets/img/SportMate_connexion.png')}></Logo>
                </WrappedView>
-               <Form/>
-           </StyledContainer>
+               <Form />
+            </StyledContainer>
             </ImageBackground>
         </SafeAreaWrapped>
     )
