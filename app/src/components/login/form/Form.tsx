@@ -1,75 +1,88 @@
 import * as React from 'react'
-import { Controller, useForm } from "react-hook-form"
+import {Controller, SubmitErrorHandler, SubmitHandler, useForm} from "react-hook-form"
 import {Text, View, TextInput, Button, Alert, StyleSheet, Pressable} from "react-native";
 import {Colors} from '../../../../assets/styles/colors'
-import {Link} from "react-router-native";
 import {Buttontext, PrimaryButton, StyledContainer, WrappedView} from "../../../../assets/styles/styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useNavigation} from "@react-navigation/native";
+import AuthService from '../../../services/auth.service'
+import axios from "axios";
 
-
-type FormData = {
+interface FormData {
     email: string;
     password: string;
 }
 
 
 const Form = () => {
-    const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
-    const onSubmit = (data: any) => console.log(data);
+    const navigation = useNavigation()
+    const {control, register, handleSubmit, formState: {errors, isSubmitSuccessful}} = useForm<FormData>();
 
+
+    const onSubmit = (data: any) => {
+
+        AuthService.login(data).then(
+            () => {
+                // @ts-ignore
+                navigation.navigate('Home');
+            }
+        )
+
+
+    }
+
+    console.log('errors', errors)
     return (
         <View>
             <View>
-                {isSubmitSuccessful && <Text style={{color: 'green'}}>Merci pour votre inscription !!!</Text>}
+                {errors.email && <Text>{errors.email.message}</Text>}
                 <Text style={styles.FormLabel}>email: </Text>
                 <Controller
+                    name="email"
                     control={control}
                     rules={{
-                    required: true,
+                        required: 'L\'email est obligatoire'
                     }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
+                    render={({field: {onChange, onBlur, value}}) => (
+                        <TextInput
+                            autoCapitalize="none"
+                            style={styles.input}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
                     )}
-                    name="email"
                 />
-
-              {errors.email && <Text>Vous devez renter un email</Text>}
-
-              <Text style={styles.FormLabel}>Mot de passe: </Text>
-              <Controller
-                control={control}
-                rules={{
-                 required: true,
-                 maxLength: 10
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={styles.input}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-                name="password"
-              />
+                {errors.password && <Text>{errors.password.message}</Text>}
+                <Text style={styles.FormLabel}>Mot de passe: </Text>
+                <Controller
+                    name="password"
+                    control={control}
+                    rules={{
+                        required: 'Le mot de passe est obligatoire'
+                    }}
+                    render={({field: {onChange, onBlur, value}}) => (
+                        <TextInput
+                            style={styles.input}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            secureTextEntry={true}
+                        />
+                    )}
+                />
             </View>
-            <WrappedView style={{marginLeft: 64, marginRight: 64}}>
+            <WrappedView>
                 <PrimaryButton onPress={handleSubmit(onSubmit)}>
-                    <Link to="/register">
-                        <Buttontext>Connexion</Buttontext>
-                    </Link>
+                    <Buttontext>Connexion</Buttontext>
                 </PrimaryButton>
             </WrappedView>
         </View>
-      );
+    );
 
 }
 const styles = StyleSheet.create({
-    FormLabel:{
+    FormLabel: {
         marginLeft: 16,
         color: '#fff',
     },
@@ -79,9 +92,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.primary,
         borderRadius: 8,
-        padding: 10
+        padding: 10,
+        color: Colors.white
     },
-    btn_bg:{
+    btn_bg: {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 16,
@@ -95,3 +109,83 @@ const styles = StyleSheet.create({
 })
 
 export default Form;
+
+/*
+     AuthService.login(data)
+         .then(() => {
+             if ()
+         return navigation.navigate('Home');
+     })
+
+       */
+/*
+const response = await fetch("https://sportmate-develop.herokuapp.com/api/login", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        email: data.email,
+        password: data.password
+    })
+})
+const resData = await response.json();
+console.log(resData)
+
+if (response.status === 200){
+    console.log('token', resData.token)
+    const setToken =  await AsyncStorage.setItem('token', JSON.stringify(resData.token));
+    const getToken = await AsyncStorage.getItem('token')
+    console.log('token storage', getToken);
+    //navigation.navigate('Home', {getToken, resData})
+} else {
+    console.log('aled')
+}
+}
+
+
+ */
+/*
+const response = await fetch("https://sportmate-develop.herokuapp.com/api/login", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        email: data.email,
+        password: data.password
+    })
+})
+const resData = await response.json();
+
+if (response.status === 200){
+   console.log('token', resData.token)
+   const setToken =  await AsyncStorage.setItem('token', JSON.stringify(resData.token));
+   const getToken = await AsyncStorage.getItem('token')
+   console.log('token storage', getToken);
+   navigation.navigate('Home', {getToken, resData})
+} else {
+   console.log('aled')
+}
+}
+
+ */
+
+/*
+const onSubmit: SubmitHandler<FormData> = (data: any) => {
+
+    const response = axios.post('https://sportmate-develop.herokuapp.com/api/login',
+       data
+    )
+        .then((response) => {
+            if (response.data.token){
+                const value =  AsyncStorage.setItem("user", JSON.stringify(response.data));
+            }
+            navigation.navigate('Home')
+            console.log(response.data, "server data")
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+ */
