@@ -4,8 +4,10 @@ import {Logo, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../../a
 import Form from "../../../components/login/form/Form";
 // @ts-ignore
 import Bg from '../../../../assets/img/SportMate_bg_connexion.png';
+import {FormProvider} from "react-hook-form";
 
-const Signin = () => {
+const Signin = ({navigation}) => {
+
     return(
         <SafeAreaWrapped>
             <ImageBackground source={Bg} resizeMode="cover" style={styles.image}>

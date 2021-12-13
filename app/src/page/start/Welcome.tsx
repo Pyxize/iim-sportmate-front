@@ -10,9 +10,10 @@ import {
     WrappedView,
     SafeAreaWrapped
 } from "../../../assets/styles/styles";
-import {Link} from "react-router-native";
 
-const Welcome = () => {
+
+const Welcome = ({ navigation }) => {
+
 
     return(
         <SafeAreaWrapped background={Colors.secondary}>
@@ -28,15 +29,11 @@ const Welcome = () => {
                 </WrappedView>
 
                 <WrappedView>
-                    <PrimaryButton>
-                        <Link to="/signin">
+                    <PrimaryButton onPress={() => navigation.navigate('Signin')}>
                             <Buttontext>Connexion</Buttontext>
-                        </Link>
                     </PrimaryButton>
-                    <PrimaryButton style={styles.button}>
-                        <Link to="/register">
-                            <Buttontext>S'inscrire</Buttontext>
-                        </Link>
+                    <PrimaryButton onPress={() => navigation.navigate('Register')} style={styles.button}>
+                            <Buttontext on>S'inscrire</Buttontext>
                     </PrimaryButton>
                 </WrappedView>
             </StyledContainer>
