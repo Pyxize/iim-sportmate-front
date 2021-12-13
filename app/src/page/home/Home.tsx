@@ -15,8 +15,6 @@ import {get, set} from "react-hook-form";
 const Home = ({navigation}) => {
 
 
-
-
     const [item, setItem] = useState(null);
     //const [user, setUser] = useState(null)
 
