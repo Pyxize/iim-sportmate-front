@@ -5,6 +5,7 @@ import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import { SafeAreaWrapped, StyledContainer, WrappedView } from '../../assets/styles/styles';
+import AddButton from './button/AddButton';
 
 export default class ListItemsHistory extends React.Component {
     state = {
@@ -60,15 +61,15 @@ export default class ListItemsHistory extends React.Component {
                                     key={i}
                                     bottomDivider
                                     Component={TouchableScale}
-                                    friction={90} 
-                                    tension={100} 
-                                    activeScale={0.95} 
+                                    friction={90}
+                                    tension={100}
+                                    activeScale={0.95}
                                     linearGradientProps={{
                                         colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
                                         start: { x: 1, y: 0 },
                                         end: { x: 0.2, y: 0 },
                                     }}
-                                    ViewComponent={LinearGradient} 
+                                    ViewComponent={LinearGradient}
                                 >
                                     <ListItem.Content>
                                         <ListItem.Title style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>{item.activityName}</ListItem.Title>
@@ -79,6 +80,7 @@ export default class ListItemsHistory extends React.Component {
                                 </ListItem>
                             ))
                         }
+                        <AddButton />
                     </View>
                     :
                     <View>
@@ -94,13 +96,13 @@ const styles = StyleSheet.create({
         marginLeft: 50,
         fontSize: 20
     },
-    activityPast:{
+    activityPast: {
         color: 'gray'
 
     },
-    activityFutur:{
+    activityFutur: {
     }
-  });
+});
 
 function isDateInPast(date: { toString: () => string | number | Date; }) {
     const today = new Date();
