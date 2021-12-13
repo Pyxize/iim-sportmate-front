@@ -11,7 +11,6 @@ type FormData = {
     password: string;
 }
 
-
 const Form = () => {
     const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
     const onSubmit = (data: any) => console.log(data);
