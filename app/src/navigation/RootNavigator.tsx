@@ -23,7 +23,7 @@ export const RootNavigator = () => {
      */
     return(
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Welcome" component={Welcome}/>
                 <Stack.Screen name="Signin" component={Signin}/>
                 <Stack.Screen name="Register" component={Register}/>

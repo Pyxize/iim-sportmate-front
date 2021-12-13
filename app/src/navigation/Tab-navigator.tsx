@@ -17,8 +17,8 @@ const TabNavigation = () => {
               iconName = focused
                 ? 'home'
                 : 'home-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } else if (route.name === 'Évènement') {
+              iconName = focused ? 'calendar' : 'calendar-outline';
             }
 
             // You can return any component that you like here!
@@ -29,6 +29,7 @@ const TabNavigation = () => {
         })}
       >
         <Tab.Screen name="Accueil" component={Homepage} />
+        <Tab.Screen name="Évènement" component={Homepage} />
       </Tab.Navigator>
     )
 }
