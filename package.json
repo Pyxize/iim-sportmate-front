@@ -10,11 +10,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@hookform/resolvers": "^2.8.4",
     "@react-native-async-storage/async-storage": "^1.15.14",
     "@react-navigation/native": "^6.0.6",
-    "@react-navigation/native-stack": "^6.2.5",
-    "axios": "^0.24.0",
     "expo": "^43.0.3",
     "react": "17.0.2",
     "react-hook-form": "^7.20.4",
