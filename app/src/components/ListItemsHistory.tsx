@@ -4,21 +4,27 @@ import { StyleSheet, View } from "react-native";
 import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
-import AddButton from './button/AddButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PrimaryButton } from '../../assets/styles/styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Colors } from '../../assets/styles/colors'
+import { useNavigation } from "@react-navigation/native";
 
 export default class ListItemsHistory extends React.Component {
     state = {
         activities: [],
         errorMessage: "",
-        token: ""
+        token: "",
+        navigation: null
     }
-
 
     async componentDidMount() {
         let config;
 
         const user = await AsyncStorage.getItem('@user');
+
+        // this.state.navigation = useNavigation();
+        console.log("navigation test ", this.state.navigation)
 
         if (user) {
             let token = user.split(",")[1].split(":")[1];
@@ -50,7 +56,8 @@ export default class ListItemsHistory extends React.Component {
     render() {
         const {
             activities,
-            errorMessage
+            errorMessage,
+            navigation
         } = this.state;
 
 
@@ -90,7 +97,12 @@ export default class ListItemsHistory extends React.Component {
                                 </ListItem>
                             ))
                         }
-                        <AddButton />
+                        <PrimaryButton onPress={() => navigation.navigate('Home')}>
+                            <Icon
+                                name="plus-circle"
+                            >
+                            </Icon>
+                        </PrimaryButton>
                     </View>
                     :
                     <View>
