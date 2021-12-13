@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Button, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
+import {Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
 import {WrappedView} from "../../../assets/styles/styles";
 import Signin from "../login/signin/Signin";
 import axios from "axios";
@@ -8,6 +8,7 @@ import AuthService from '../../services/auth.service'
 // @ts-ignore
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect, useState} from "react";
+import ListItems from '../../components/ListItems';
 
 const Home = ({navigation}) => {
     const [item, setItem] = useState(null);
@@ -19,11 +20,9 @@ const Home = ({navigation}) => {
 
     // @ts-ignore
     return (
-        <WrappedView>
-            <Text>
-             La home
-            </Text>
-        </WrappedView>
+        <ScrollView>
+            <ListItems/>
+        </ScrollView>
     )
 }
 export default Home;
