@@ -3,14 +3,9 @@ import {Controller, SubmitErrorHandler, SubmitHandler, useForm} from "react-hook
 import {Text, View, TextInput, Button, Alert, StyleSheet, Pressable} from "react-native";
 import {Colors} from '../../../../assets/styles/colors'
 import {Buttontext, PrimaryButton, StyledContainer, WrappedView} from "../../../../assets/styles/styles";
-<<<<<<< HEAD
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useNavigation} from "@react-navigation/native";
 import AuthService from '../../../services/auth.service'
 import axios from "axios";
-=======
-import { useNavigation } from '@react-navigation/core';
->>>>>>> bce98ee1 (Update Navbar)
 
 interface FormData {
     email: string;
@@ -78,22 +73,7 @@ const Form = () => {
             </View>
             <WrappedView>
                 <PrimaryButton onPress={handleSubmit(onSubmit)}>
-<<<<<<< HEAD
-<<<<<<< HEAD
                     <Buttontext>Connexion</Buttontext>
-=======
-                    <Link to="/home">
-                        <Buttontext>Connexion</Buttontext>
-                    </Link>
-=======
->>>>>>> bce98ee1 (Update Navbar)
-                    {/* <Button
-                        title="Connexion"
-                        onPress={() =>
-                            navigation.navigate('Home')
-                        }
-                    /> */}
->>>>>>> fb6bfcf1 (Update .gitignore and add navbar)
                 </PrimaryButton>
             </WrappedView>
         </View>
