@@ -14,9 +14,9 @@ PODS:
     - ExpoModulesCore
   - EXKeepAwake (10.0.0):
     - ExpoModulesCore
-  - Expo (43.0.3):
+  - Expo (43.0.4):
     - ExpoModulesCore
-  - ExpoModulesCore (0.4.8):
+  - ExpoModulesCore (0.4.9):
     - React-Core
   - FBLazyVector (0.66.3)
   - FBReactNativeSpec (0.66.3):
@@ -357,7 +357,7 @@ PODS:
     - React-perflogger (= 0.66.3)
   - RNCAsyncStorage (1.15.14):
     - React-Core
-  - RNScreens (3.10.0):
+  - RNScreens (3.10.1):
     - React-Core
     - React-RCTImage
   - Yoga (1.14.0)
@@ -541,8 +541,8 @@ SPEC CHECKSUMS:
   EXFileSystem: 99aac7962c11c680681819dd9cbca24e20e5b1e7
   EXFont: 2e1c6fe726d008a039db80df95f48b4921b7fe59
   EXKeepAwake: 8aa32396a5972d26e75e538603aad0f032396503
-  Expo: 5316c3ecdc34eb0cad340d01dc8beec97c7e879e
-  ExpoModulesCore: a9a9bf32b2da35cd9b7299c80790c03a91ac7d15
+  Expo: 363a3f3c60d5a1d4f8badb29a869005487f2d9e4
+  ExpoModulesCore: e41ed0b72daeac74731816ad7997d639f0115a9d
   FBLazyVector: de148e8310b8b878db304ceea2fec13f2c02e3a0
   FBReactNativeSpec: 6192956c9e346013d5f1809ba049af720b11c6a4
   Flipper: 30e8eeeed6abdc98edaf32af0cda2f198be4b733
@@ -584,7 +584,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: bbbdb3d8fcf327c6e2249ee71b6ef1764b7dc266
   ReactCommon: 9bac022ab71596f2b0fde1268272543184c63971
   RNCAsyncStorage: ea6b5c280997b2b32a587793163b1f10e580c4f7
-  RNScreens: 03ba504f8c98607ad1f07808e71040e0afa335ec
+  RNScreens: 522705f2e5c9d27efb17f24aceb2bf8335bc7b8e
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
