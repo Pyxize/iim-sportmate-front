@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect, useState} from "react";
 import {get, set} from "react-hook-form";
 
+<<<<<<< HEAD
 
 
 const Home = ({navigation}) => {
@@ -24,6 +25,10 @@ const Home = ({navigation}) => {
 
     // @ts-ignore
     return (
+=======
+const Homepage = () => {
+    return(
+>>>>>>> fb6bfcf1 (Update .gitignore and add navbar)
         <WrappedView>
             <Text>
              La home
@@ -32,4 +37,8 @@ const Home = ({navigation}) => {
     )
 }
 
+<<<<<<< HEAD
 export default Home;
+=======
+export default Homepage;
+>>>>>>> fb6bfcf1 (Update .gitignore and add navbar)

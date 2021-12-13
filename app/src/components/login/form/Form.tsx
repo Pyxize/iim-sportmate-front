@@ -74,7 +74,19 @@ const Form = () => {
             </View>
             <WrappedView>
                 <PrimaryButton onPress={handleSubmit(onSubmit)}>
+<<<<<<< HEAD
                     <Buttontext>Connexion</Buttontext>
+=======
+                    <Link to="/home">
+                        <Buttontext>Connexion</Buttontext>
+                    </Link>
+                    {/* <Button
+                        title="Connexion"
+                        onPress={() =>
+                            navigation.navigate('Home')
+                        }
+                    /> */}
+>>>>>>> fb6bfcf1 (Update .gitignore and add navbar)
                 </PrimaryButton>
             </WrappedView>
         </View>
