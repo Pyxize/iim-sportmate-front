@@ -57,6 +57,7 @@ const Welcome = ({ navigation }) => {
                             }
                         />
                     </PrimaryButton>
+<<<<<<< HEAD
                     <PrimaryButton style={styles.button}>
                         <Button
                             title="Accueil"
@@ -66,6 +67,8 @@ const Welcome = ({ navigation }) => {
                         />
 >>>>>>> fb6bfcf1 (Update .gitignore and add navbar)
                     </PrimaryButton>
+=======
+>>>>>>> bce98ee1 (Update Navbar)
                 </WrappedView>
             </StyledContainer>
         </SafeAreaWrapped>

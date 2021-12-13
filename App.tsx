@@ -28,6 +28,7 @@ import {NativeRouter, Route, Routes} from "react-router-native";
 import Register from "./app/src/page/login/register/Register";
 import Signin from "./app/src/page/login/signin/Signin";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Home from "./app/src/page/home/Home";
@@ -37,6 +38,9 @@ import {RootNavigator} from "./app/src/navigation/RootNavigator";
 import Home from "./app/src/page/home/Home"
 import TabNavigator from './app/src/components/navigation/tab-navigator';
 >>>>>>> fb6bfcf1 (Update .gitignore and add navbar)
+=======
+import TabNavigation from './app/src/components/navigation/Tab-navigator';
+>>>>>>> bce98ee1 (Update Navbar)
 
 /*
 import {
@@ -68,7 +72,7 @@ const App = () => {
           <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Signin" component={Signin} />
-          <Stack.Screen name="Home" component={TabNavigator} />
+          <Stack.Screen name="Home" component={TabNavigation} />
         </Stack.Navigator>
     </NavigationContainer>
   );
