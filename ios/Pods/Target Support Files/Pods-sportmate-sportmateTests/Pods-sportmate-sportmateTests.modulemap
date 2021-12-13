@@ -1,0 +1,6 @@
+module Pods_sportmate_sportmateTests {
+  umbrella header "Pods-sportmate-sportmateTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

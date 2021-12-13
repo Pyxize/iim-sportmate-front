@@ -1,0 +1,6 @@
+module Pods_sportmate {
+  umbrella header "Pods-sportmate-umbrella.h"
+
+  export *
+  module * { export * }
+}
