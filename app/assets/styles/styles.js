@@ -43,3 +43,8 @@ export const Buttontext = styled.Text`
     color: ${Colors.white};
     font-size: 16px;
 `
+
+export const IconBtn = styled.Pressable`
+  margin-top: 10px;
+  margin-bottom: 10px;
+`

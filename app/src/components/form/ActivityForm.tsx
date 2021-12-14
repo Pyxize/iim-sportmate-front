@@ -1,10 +1,12 @@
 import { Controller, useForm } from "react-hook-form"
  import { Text, View, TextInput, Button, Alert, StyleSheet, Pressable } from "react-native";
+ import AsyncStorage from '@react-native-async-storage/async-storage';
  import { Colors } from '../../../assets/styles/colors'
  import { Buttontext, PrimaryButton, StyledContainer, WrappedView } from "../../../assets/styles/styles";
  import React, { useState, useRef } from 'react';
  import DatePicker from 'react-native-datepicker';
  import RNPickerSelect from "react-native-picker-select";
+ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
  import axios from 'axios';
 
  type FormData = {
@@ -16,24 +18,43 @@ import { Controller, useForm } from "react-hook-form"
      address: string;
      participant: string;
      contact: string;
+     isEvent: boolean;
  }
 
  const Form = () => {
      const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
-     const onSubmit = (data: any) => {
-         const headers = {
-             'Content-Type': 'application/json',
-             'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2MzkzMzAyODAsImV4cCI6MTYzOTMzMDg4MH0.OSxpBaIbIo_bwx0KUCWfP7H-uporc5tcHhXSOtywTVhag-m2dUenlSSW8zI8V7AUnb6SBeGEUNJKUkd3yejytg`
-         };
+
+     let config;
+     let errorMessage;
+
+     const onSubmit = async (data: any) => {
+        const user = await AsyncStorage.getItem('@user');
+
+        if (user) {
+            let token = user.split(",")[1].split(":")[1];
+            token = token.substring(1, token.length - 2);
+            config = {
+                headers: { Authorization: "Bearer " + token }
+            };
+        }
 
          console.log(data);
-         axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, {
-             headers: headers
-           })
+         console.log('CONFIIIIG', config);
+         axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
               .then(res => {
                  console.log(res);
                  console.log(res.data);
              })
+             .catch(error => {
+                console.log("ERREUR lors de l'appel à activity/user: ", error);
+                error = error.toString();
+                if (error.includes('403')) {
+                    errorMessage = "Oups vous n'êtes pas autorisé";
+                } else {
+                    errorMessage = error;
+                }
+                return errorMessage;
+            });
      }
      const [date, setDate] = useState(new Date());
      const [itemLevel, setItemLevel] = useState([
@@ -46,12 +67,30 @@ import { Controller, useForm } from "react-hook-form"
          { label: 'Natation', value: 'Natation' },
          { label: 'Vélo', value: 'Vélo' }
      ]);
+    //  const [itemRadioProps, setItemRadioProps] = useState([
+    //     { label: 'Évènement', value: 'event' },
+    //     { label: 'Sport', value: 'sport' },
+    // ]);
 
      return (
          <View>
              <View>
-                 {isSubmitSuccessful && <Text style={{ color: 'green' }}>Evènement bien créé !!!</Text>}
-                 <Text style={styles.FormLabel}>Nom de l'évènement: </Text>
+                 {/* <Text style={styles.FormLabel}>Type: </Text>
+                 <Controller
+                     control={control}
+                     rules={{
+                         required: true,
+                     }}
+                     render={({ field: { onChange, onBlur, value } }) => (
+                        <RadioForm
+                        radio_props={itemRadioProps}
+                        initial={0}
+                        onPress={(value) => {setItemRadioProps(value)}}
+                      />
+                     )}
+                     name="isEvent"
+                 /> */}
+                  <Text style={styles.FormLabel}>Nom de l'évènement: </Text>
                  <Controller
                      control={control}
                      rules={{
@@ -223,6 +262,7 @@ import { Controller, useForm } from "react-hook-form"
 
              </View>
              <WrappedView style={{ marginLeft: 64, marginRight: 64 }}>
+                {errorMessage === "" ? null :  <Text style={styles.error}>{errorMessage}</Text>}
                  <PrimaryButton onPress={handleSubmit(onSubmit)}>
                      {/* <Link to="/signin"> */}
                      <Buttontext>Sauvegarder</Buttontext>

@@ -5,26 +5,23 @@ import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PrimaryButton } from '../../assets/styles/styles';
+import { PrimaryButton, IconBtn, WrappedView } from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from "@expo/vector-icons/Ionicons"
 import { Colors } from '../../assets/styles/colors'
 import { useNavigation } from "@react-navigation/native";
 
-export default class ListItemsHistory extends React.Component {
+class ListItemsHistory extends React.Component {
     state = {
         activities: [],
         errorMessage: "",
         token: "",
-        navigation: null
     }
 
     async componentDidMount() {
         let config;
 
         const user = await AsyncStorage.getItem('@user');
-
-        // this.state.navigation = useNavigation();
-        console.log("navigation test ", this.state.navigation)
 
         if (user) {
             let token = user.split(",")[1].split(":")[1];
@@ -57,13 +54,13 @@ export default class ListItemsHistory extends React.Component {
         const {
             activities,
             errorMessage,
-            navigation
         } = this.state;
-
 
         const colorFuturActivity = ['#F44336', '#FF9800'];
         const colorPastActivity = ['#696969', '#A9A9A9'];
         const today = new Date();
+
+        const { navigation } = this.props;
 
         return (
             <View>
@@ -97,12 +94,11 @@ export default class ListItemsHistory extends React.Component {
                                 </ListItem>
                             ))
                         }
-                        <PrimaryButton onPress={() => navigation.navigate('Home')}>
-                            <Icon
-                                name="plus-circle"
-                            >
-                            </Icon>
-                        </PrimaryButton>
+                        <WrappedView>
+                            <IconBtn onPress={() => navigation.navigate('ActivityAction')}>
+                                <Ionicons name='add-circle' size={40} color='#F67201'></Ionicons>
+                            </IconBtn>
+                        </WrappedView>
                     </View>
                     :
                     <View>
@@ -130,4 +126,10 @@ function isDateInPast(date: { toString: () => string | number | Date; }) {
     const today = new Date();
     const dateInput = new Date(date.toString())
     return dateInput.getTime() < today.getTime();
+}
+
+export default function() {
+    const navigation = useNavigation();
+  
+    return <ListItemsHistory navigation={navigation} />
 }
