@@ -27,10 +27,12 @@ export const Logo = styled.Image`
 `
 
 export const PageTitle = styled.Text`
+    margin-top: 32px;
+    margin-bottom: 32px;
     font-size: 30px;
     text-align: center;
     font-weight: bold;
-    color: ${Colors.white};
+    color: ${props => props.textColor || "#fff"};
 `
 
 export const PrimaryButton = styled.Pressable`

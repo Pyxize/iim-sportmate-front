@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React from "react";
-import { StyleSheet, SwipeableListView, TouchableNativeFeedbackComponent, View } from "react-native";
+import {FlatList, StyleSheet, SwipeableListView, TouchableNativeFeedbackComponent, View} from "react-native";
 import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import authHeader from '../services/auth-header';
+import {Colors} from "../../assets/styles/colors";
+import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../assets/styles/styles";
 
 export default class ListItems extends React.Component {
     state = {
@@ -54,27 +56,17 @@ export default class ListItems extends React.Component {
         } = this.state;
 
         return (
-            <View>
+            <View style={styles.wrapped}>
                 {errorMessage === "" ?
                     <View>
                         {
                             activities.map((item, i) => (
-                                <ListItem style={{
-                                    borderBottomColor: 'black',
-                                    borderBottomWidth: 1,
-                                }}
+                                <ListItem style={styles.listItemWrapper}
                                     key={i}
-                                    bottomDivider
                                     Component={TouchableScale}
                                     friction={90}
                                     tension={100}
                                     activeScale={0.95}
-                                    linearGradientProps={{
-                                        colors: ['#FF9800', '#F44336'],
-                                        start: { x: 1, y: 0 },
-                                        end: { x: 0.2, y: 0 },
-                                    }}
-                                    ViewComponent={LinearGradient}
                                 >
                                     <ListItem.Content>
                                         <ListItem.Title>{item.activityName}</ListItem.Title>
@@ -91,14 +83,22 @@ export default class ListItems extends React.Component {
                         <Text style={styles.container}> {errorMessage}</Text>
                     </View>
                 }
-            </View>)
+            </View>
+            )
+
     };
 }
 const styles = StyleSheet.create({
+    wrapped: {
+      marginBottom: 50
+    },
     container: {
         marginTop: 50,
         marginLeft: 10,
         fontSize: 20
+    },
+    listItemWrapper: {
+        marginBottom: 16
     }
 });
 

@@ -30,6 +30,7 @@ const SetValue = async (user) => {
     }
 }
 
+
 const login = async (email, password) => {
 
 
@@ -58,6 +59,13 @@ const login = async (email, password) => {
 
 }
 
+const register = async (email, password) => {
+    const response = await axios.post('https://sportmate-develop.herokuapp.com/api/signin',
+        email,
+        password
+    )
+}
+
 const setAccessToken = (token, user) => {
       AsyncStorage.setItem('@token', token)
       AsyncStorage.setItem('@user', JSON.stringify(user))
@@ -81,6 +89,7 @@ const getUser = () => {
 
 export default {
     login,
+    register,
     logout,
     getUser
 }

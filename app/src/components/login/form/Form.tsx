@@ -30,11 +30,10 @@ const Form = () => {
 
     }
 
-    console.log('errors', errors)
     return (
         <View>
             <View>
-                {errors.email && <Text>{errors.email.message}</Text>}
+                {errors.email && <Text style={styles.textError}>{errors.email.message}</Text>}
                 <Text style={styles.FormLabel}>email: </Text>
                 <Controller
                     name="email"
@@ -52,7 +51,7 @@ const Form = () => {
                         />
                     )}
                 />
-                {errors.password && <Text>{errors.password.message}</Text>}
+                {errors.password && <Text style={styles.textError}>{errors.password.message}</Text>}
                 <Text style={styles.FormLabel}>Mot de passe: </Text>
                 <Controller
                     name="password"
@@ -84,6 +83,11 @@ const styles = StyleSheet.create({
     FormLabel: {
         marginLeft: 16,
         color: '#fff',
+    },
+    textError: {
+        marginLeft: 16,
+        marginBottom: 16,
+        color: '#eb4d4b',
     },
     input: {
         margin: 16,
