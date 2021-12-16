@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {FlatList, StyleSheet, SwipeableListView, TouchableNativeFeedbackComponent, View} from "react-native";
 import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -9,6 +9,76 @@ import authHeader from '../services/auth-header';
 import {Colors} from "../../assets/styles/colors";
 import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../assets/styles/styles";
 
+const ListItems = () => {
+    const [activities, setActivities] = useState([])
+    let [user, setUser] = useState('')
+
+     const getUser = async () => {
+         try {
+             const value = await AsyncStorage.getItem('@user');
+             if (value !== null) {
+                 console.log('value', value)
+                 setUser(value)
+                 user = value
+             }
+         } catch (e) {
+             console.log('erreur', e)
+         }
+     }
+
+
+        useEffect(() => {
+
+            let config;
+
+            if (user) {
+                let token = user.split(",")[1].split(":")[1];
+                token = token.substring(1, token.length - 2);
+                config = {
+                    headers: {Authorization: "Bearer " + token}
+                };
+            }
+            axios.get(`https://sportmate-develop.herokuapp.com/api/activity/all`, config)
+                .then(res => {
+                    console.log(res.data)
+                    const activities = res.data;
+                    console.log('activities', activities)
+                    setActivities(activities)
+                })
+                .catch(error => {
+                    console.log("ERREUR lors de l'appel à activity/user: ", error);
+                    error = error.toString();
+                    if (error.includes('403')) {
+                        //  this.setState({ errorMessage: "Oups vous n'êtes pas autorisé" });
+                    } else {
+                        // this.setState({ errorMessage: error });
+                    }
+                    return error;
+                });
+
+        }, [])
+
+        return (
+            <View>
+                <FlatList
+                    data={activities}
+                    keyExtractor={(item, index) => {
+                        console.log("index", index)
+                        return index.toString();
+                    }}
+                    renderItem={({item}) => {
+                        console.log("item", item)
+                        return (
+                            <Text>{item.activityName}</Text>
+                        )
+                    }}
+                />
+            </View>
+        )
+}
+export default ListItems;
+
+/*
 export default class ListItems extends React.Component {
     state = {
         activities: [],
@@ -34,7 +104,7 @@ export default class ListItems extends React.Component {
             .then(res => {
                 console.log(res.data)
                 const activities = res.data;
-                console.log(activities)
+                console.log('activities', activities)
                 this.setState({ activities: activities });
             })
             .catch(error => {
@@ -102,3 +172,6 @@ const styles = StyleSheet.create({
     }
 });
 
+
+
+ */

@@ -22,7 +22,6 @@ const Home = ({navigation}) => {
 
     // @ts-ignore
     return (
-        <ScrollView>
             <SafeAreaWrapped>
                 <LinearGradient colors={['#F0BB8E', '#9494B7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                 <StyledContainer>
@@ -31,7 +30,6 @@ const Home = ({navigation}) => {
                 </StyledContainer>
                 </LinearGradient>
             </SafeAreaWrapped>
-        </ScrollView>
     )
 }
 export default Home;
