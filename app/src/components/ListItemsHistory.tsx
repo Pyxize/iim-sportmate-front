@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,10 +19,22 @@ class ListItemsHistory extends React.Component {
     }
 
     async componentDidMount() {
+        this.callToSave()
+
+    }
+
+    async componentDidUpdate() {
+        const commejeveux = setTimeout(() => {
+            this.callToSave()
+        }, 2000);
+        
+        return () => clearTimeout(commejeveux)
+    }
+
+    async callToSave() {
         let config;
 
         const user = await AsyncStorage.getItem('@user');
-
         if (user) {
             let token = user.split(",")[1].split(":")[1];
             token = token.substring(1, token.length - 2);
@@ -32,22 +44,22 @@ class ListItemsHistory extends React.Component {
         }
 
         axios.get(`https://sportmate-develop.herokuapp.com/api/activity/user`, config)
-            .then(res => {
-                console.log(res.data)
-                const activities = res.data;
-                console.log(activities)
-                this.setState({ activities: activities });
-            })
-            .catch(error => {
-                console.log("ERREUR lors de l'appel à activity/user: ", error);
-                error = error.toString();
-                if (error.includes('403')) {
-                    this.setState({ errorMessage: "Oups vous n'êtes pas autorisé" });
-                } else {
-                    this.setState({ errorMessage: error });
-                }
-                return error;
-            });
+        .then(res => {
+            console.log(res.data)
+            const activities = res.data;
+            console.log(activities)
+            this.setState({ activities: activities });
+        })
+        .catch(error => {
+            console.log("ERREUR lors de l'appel à activity/user: ", error);
+            error = error.toString();
+            if (error.includes('403')) {
+                this.setState({ errorMessage: "Oups vous n'êtes pas autorisé" });
+            } else {
+                this.setState({ errorMessage: error });
+            }
+            return error;
+        });
     }
 
     render() {
@@ -56,22 +68,22 @@ class ListItemsHistory extends React.Component {
             errorMessage,
         } = this.state;
 
-        const colorFuturActivity = ['#F44336', '#FF9800'];
-        const colorPastActivity = ['#696969', '#A9A9A9'];
+        const colorFuturActivity = ['#FFF', '#FFF'];
+        const colorPastActivity = ['#DCDCDC', '#DCDCDC'];
         const today = new Date();
 
         const { navigation } = this.props;
 
+        // console.log('ICIIIIIIII', JSON.stringify(navigation.getParam('saved')));
+        
+
         return (
-            <View>
+            <View style={styles.wrapped}>
                 {errorMessage === "" ?
                     <View>
                         {
                             activities.map((item, i) => (
-                                <ListItem style={{
-                                    borderBottomColor: 'black',
-                                    borderBottomWidth: 1,
-                                }}
+                                <ListItem style={styles.listItemWrapper}
                                     key={i}
                                     bottomDivider
                                     Component={TouchableScale}
@@ -80,8 +92,8 @@ class ListItemsHistory extends React.Component {
                                     activeScale={0.95}
                                     linearGradientProps={{
                                         colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
-                                        start: { x: 1, y: 0 },
-                                        end: { x: 0.2, y: 0 },
+                                        start: { x: 1, y: 1 },
+                                        end: { x: 1, y: 1 },
                                     }}
                                     ViewComponent={LinearGradient}
                                 >
@@ -109,14 +121,19 @@ class ListItemsHistory extends React.Component {
     };
 }
 const styles = StyleSheet.create({
+    wrapped: {
+        marginBottom: 50,
+    },
     container: {
         marginTop: 50,
-        marginLeft: 50,
+        marginLeft: 10,
         fontSize: 20
+    },
+    listItemWrapper: {
+        marginBottom: 16,
     },
     activityPast: {
         color: 'gray'
-
     },
     activityFutur: {
     }

@@ -22,16 +22,25 @@ const Home = ({navigation}) => {
 
     // @ts-ignore
     return (
-        <ScrollView>
-            <SafeAreaWrapped>
-                <LinearGradient colors={['#F0BB8E', '#9494B7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                <StyledContainer>
-                    <PageTitle textColor={Colors.black}>Evenements</PageTitle>
-                    <ListItems/>
-                </StyledContainer>
-                </LinearGradient>
-            </SafeAreaWrapped>
-        </ScrollView>
+        <SafeAreaView>            
+            <LinearGradient style={styles.lineargradient} colors={['#F0BB8E', '#9494B7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+                <ScrollView>
+                    <SafeAreaWrapped>
+                        <StyledContainer>
+                            <PageTitle textColor={Colors.black}>Près de chez moi</PageTitle>
+                            <ListItems/>
+                        </StyledContainer>
+                    </SafeAreaWrapped>
+                </ScrollView>
+            </LinearGradient>
+        </SafeAreaView>
+        
     )
 }
 export default Home;
+
+const styles = StyleSheet.create({
+    lineargradient: {
+        height: '100%'
+    }
+});

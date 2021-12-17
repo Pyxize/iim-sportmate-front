@@ -16,7 +16,7 @@ const Welcome = ({ navigation }) => {
         <SafeAreaWrapped background={Colors.secondary}>
             <StyledContainer>
                 <WrappedView>
-                    <Logo resizeMode="cover" source={require('../../../assets/img/logo-sport-mate.png')}></Logo>
+                    <Logo resizeMode="cover" source={require('../../../assets/img/SportMate_White.png')}></Logo>
                 </WrappedView>
 
                 <WrappedView>

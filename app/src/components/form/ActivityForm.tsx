@@ -2,12 +2,15 @@ import { Controller, useForm } from "react-hook-form"
  import { Text, View, TextInput, Button, Alert, StyleSheet, Pressable } from "react-native";
  import AsyncStorage from '@react-native-async-storage/async-storage';
  import { Colors } from '../../../assets/styles/colors'
- import { Buttontext, PrimaryButton, StyledContainer, WrappedView } from "../../../assets/styles/styles";
+ import { Buttontext, PrimaryButton, StyledContainer, WrappedView, PageTitle } from "../../../assets/styles/styles";
  import React, { useState, useRef } from 'react';
  import DatePicker from 'react-native-datepicker';
  import RNPickerSelect from "react-native-picker-select";
  import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
  import axios from 'axios';
+import { NavigationContainer } from "@react-navigation/native";
+import {useNavigation} from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
  type FormData = {
      activityName: string;
@@ -23,6 +26,7 @@ import { Controller, useForm } from "react-hook-form"
 
  const Form = () => {
      const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+     const navigation = useNavigation();
 
      let config;
      let errorMessage;
@@ -44,6 +48,7 @@ import { Controller, useForm } from "react-hook-form"
               .then(res => {
                  console.log(res);
                  console.log(res.data);
+                 navigation.navigate('Évènement', {saved: 'saved'})
              })
              .catch(error => {
                 console.log("ERREUR lors de l'appel à activity/user: ", error);
@@ -59,13 +64,12 @@ import { Controller, useForm } from "react-hook-form"
      const [date, setDate] = useState(new Date());
      const [itemLevel, setItemLevel] = useState([
          { label: 'Débutant', value: 'Débutant' },
-         { label: 'Intérmediaire', value: 'Intérmediaire' },
-         { label: 'Expert', value: 'expert' }
+         { label: 'Intermédiaire', value: 'Intermédiaire' },
+         { label: 'Confirmé', value: 'Confirmé' }
      ]);
      const [itemSport, setItemSport] = useState([
-         { label: 'Course', value: 'Course' },
+         { label: 'Course', value: 'Course à pied' },
          { label: 'Natation', value: 'Natation' },
-         { label: 'Vélo', value: 'Vélo' }
      ]);
     //  const [itemRadioProps, setItemRadioProps] = useState([
     //     { label: 'Évènement', value: 'event' },
@@ -73,7 +77,8 @@ import { Controller, useForm } from "react-hook-form"
     // ]);
 
      return (
-         <View>
+         <SafeAreaView>
+             <PageTitle>Création d'évènement</PageTitle>
              <View>
                  {/* <Text style={styles.FormLabel}>Type: </Text>
                  <Controller
@@ -269,7 +274,7 @@ import { Controller, useForm } from "react-hook-form"
                      {/* </Link> */}
                  </PrimaryButton>
              </WrappedView>
-         </View>
+         </SafeAreaView>
      );
 
  }
