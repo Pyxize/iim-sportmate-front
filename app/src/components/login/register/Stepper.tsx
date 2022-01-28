@@ -2,9 +2,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
-import { Buttontext, PrimaryButton, WrappedView } from '../../../../../assets/styles/styles';
-import Form from '../../form/Form';
-import FormRegister from './FormRegister';
+import { Buttontext, PrimaryButton, WrappedView } from '../../../../assets/styles/styles';
+import Form from '../form/Form';
+import FormRegister from './form/FormRegister';
+import UserRegister from './form/UserRegister';
 
 // const PAGES = ["Auth", "User", "Hoobies", "Sport"];
 const labels = ["Identification",  "Sport", "Données personnelles", "Centres d'intêret"];
@@ -95,7 +96,7 @@ export default function Stepper({setTitle}) {
             }
             case 2: {
                 return (
-                    <Form/>
+                    <UserRegister/>
                 );
             }
             case 3: {
