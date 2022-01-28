@@ -1,14 +1,14 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
-import { Buttontext, PrimaryButton, WrappedView } from '../../../../assets/styles/styles';
+import { Buttontext, PrimaryButton, WrappedView, StyledContainer, SafeAreaWrapped } from '../../../../assets/styles/styles';
 import Form from '../form/Form';
 import FormRegister from './form/FormRegister';
 import UserRegister from './form/UserRegister';
 
 // const PAGES = ["Auth", "User", "Hoobies", "Sport"];
-const labels = ["Identification",  "Sport", "Données personnelles", "Centres d'intêret"];
+const labels = ["Identification", "Sport", "Données personnelles", "Centres d'intêret"];
 
 
 const secondIndicatorStyles = {
@@ -75,7 +75,7 @@ const getStepIndicatorIconConfig = ({
 };
 
 
-export default function Stepper({setTitle}) {
+export default function Stepper({ setTitle }) {
     const [currentPage, setCurrentPage] = React.useState<number>(0);
     const stepCount = 4
     // const onStepPress = (position: number) => {
@@ -86,22 +86,24 @@ export default function Stepper({setTitle}) {
         switch (pageNumber) {
             case 0: {
                 return (
-                    <FormRegister/>
+                    <FormRegister />
                 );
             }
             case 1: {
                 return (
-                    <Form/>
+                    <Form />
                 );
             }
             case 2: {
                 return (
-                    <UserRegister/>
+                    <ScrollView>
+                        <UserRegister />
+                    </ScrollView>
                 );
             }
             case 3: {
                 return (
-                    <FormRegister/>
+                    <FormRegister />
                 );
             }
             default: {

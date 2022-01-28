@@ -1,13 +1,9 @@
 import * as React from 'react'
-import {Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
-import {PageTitle, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../assets/styles/styles";
-import Signin from "../login/signin/Signin";
-import axios from "axios";
-import authHeader from "../../services/auth-header";
-import AuthService from '../../services/auth.service'
+import {SafeAreaView, ScrollView, StyleSheet} from "react-native";
+import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../../assets/styles/styles";
 // @ts-ignore
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import ListItems from '../../components/ListItems';
 import {Colors} from "../../../assets/styles/colors";
 import LinearGradient from "react-native-linear-gradient";

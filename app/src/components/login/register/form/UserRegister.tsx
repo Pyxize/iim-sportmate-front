@@ -3,10 +3,11 @@ import { Text, View, TextInput, StyleSheet, Image } from "react-native";
 import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
 import React, { useState } from 'react';
 import DatePicker from 'react-native-datepicker';
-// import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../../../../assets/styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
+import UploadImage from "./UploadImage";
 
 type FormData = {
     profilepPicture: string;
@@ -25,6 +26,10 @@ const UserRegister = () => {
 
     }
 
+    const [sexRadio, setSexRadio] = useState([
+        { label: 'Femme', value: 'femme' },
+        { label: 'Homme', value: 'homme' },
+    ]);
     const [date, setDate] = useState(new Date());
 
     return (
@@ -32,22 +37,12 @@ const UserRegister = () => {
             <View>
                 <View>
                     {errors.profilepPicture && <Text style={styles.textError}>{errors.profilepPicture.message}</Text>}
-                    {/* <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/> */}
                     <Text style={styles.FormLabel}>Image Profile: </Text>
                     <Controller
                         name="profilepPicture"
                         control={control}
-                        // rules={{
-                        //     required: 'L\'email est obligatoire'
-                        // }}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                autoCapitalize="none"
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                            />
+                            <UploadImage />
                         )}
                     />
 
@@ -65,7 +60,6 @@ const UserRegister = () => {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
-                                secureTextEntry={true}
                             />
                         )}
                     />
@@ -84,7 +78,6 @@ const UserRegister = () => {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
-                                secureTextEntry={true}
                             />
                         )}
                     />
@@ -92,24 +85,32 @@ const UserRegister = () => {
                     {errors.sex && <Text style={styles.textError}>{errors.sex.message}</Text>}
                     <Text style={styles.FormLabel}>Sex: </Text>
                     <Controller
-                        name="sex"
                         control={control}
+                        rules={{
+                            required: true,
+                        }}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                                secureTextEntry={true}
+                            <RadioForm style={styles.radioForm}
+                                radio_props={sexRadio}
+                                initial={0}
+                                formHorizontal={true}
+                                buttonColor={Colors.primary}
+                                labelColor={Colors.white}
+                                onPress={onChange}
+                                selectedButtonColor={Colors.primary}
+                                selectedLabelColor={Colors.white}
+                                labelStyle={{
+                                    paddingRight: 60
+                                }}
                             />
                         )}
+                        name="sex"
                     />
 
                     {errors.birthday && <Text style={styles.textError}>{errors.birthday.message}</Text>}
                     <Text style={styles.FormLabel}>Date da naissance: </Text>
                     <Controller
                         control={control}
-
                         render={({ field: { onChange, onBlur, value } }) => (
                             <DatePicker style={styles.datePickerStyle}
                                 onDateChange={onChange}
@@ -158,7 +159,6 @@ const UserRegister = () => {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
-                                secureTextEntry={true}
                             />
                         )}
                     />
@@ -211,17 +211,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         color: '#fff',
     },
-    // avatar: {
-    //     width: 130,
-    //     height: 130,
-    //     borderRadius: 63,
-    //     borderWidth: 4,
-    //     borderColor: "white",
-    //     marginBottom:10,
-    //     alignSelf:'center',
-    //     position: 'absolute',
-    //     marginTop:130
-    //   },
+    radioForm: {
+        marginLeft: 40,
+        marginTop: 16,
+        marginBottom: 16,
+    },
 })
 
 export default UserRegister;
