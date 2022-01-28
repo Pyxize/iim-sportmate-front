@@ -7,7 +7,7 @@ import Form from '../../form/Form';
 import FormRegister from './FormRegister';
 
 // const PAGES = ["Auth", "User", "Hoobies", "Sport"];
-const labels = ["Identification", "Données personnelles", "Centres d'intêret", "Sport"];
+const labels = ["Identification",  "Sport", "Données personnelles", "Centres d'intêret"];
 
 
 const secondIndicatorStyles = {
@@ -55,15 +55,15 @@ const getStepIndicatorIconConfig = ({
             break;
         }
         case 1: {
-            iconConfig.name = 'person';
+            iconConfig.name = 'fitness-center';
             break;
         }
         case 2: {
-            iconConfig.name = 'theater-comedy';
+            iconConfig.name = 'person';
             break;
         }
         case 3: {
-            iconConfig.name = 'fitness-center';
+            iconConfig.name = 'theater-comedy';
             break;
         }
         default: {
@@ -113,17 +113,17 @@ export default function Stepper({setTitle}) {
         switch (pageNumber) {
             case 0: {
                 return (
-                    "Données personnelles"
+                    "Sport pratiqués"
                 );
             }
             case 1: {
                 return (
-                   "Centres d'intêrets"
+                    "Données personnelles"
                 );
             }
             case 2: {
                 return (
-                    "Sport pratiqués"
+                    "Centres d'intêrets"
                 );
             }
             default: {
