@@ -28,7 +28,7 @@ const FormRegister = () => {
         <View>
             <View>
                 {errors.email && <Text style={styles.textError}>{errors.email.message}</Text>}
-                <Text style={styles.FormLabel}>email: </Text>
+                <Text style={styles.FormLabel}>Email: </Text>
                 <Controller
                     name="email"
                     control={control}

@@ -74,20 +74,12 @@ const getStepIndicatorIconConfig = ({
 };
 
 
-export default function Stepper(props) {
-    const counter= "Créez votre compte";
-    
+export default function Stepper({setTitle}) {
     const [currentPage, setCurrentPage] = React.useState<number>(0);
     const stepCount = 4
-    const onStepPress = (position: number) => {
-        setCurrentPage(position);
-        props.setParentCounter(findCurrentTitle(currentPage));
-    };
-
-    // handleCurrentTitle = () => {
-    //     var title = "Toto";
-    //     this.props.currentTitle(title);            
-    // }
+    // const onStepPress = (position: number) => {
+    //     setCurrentPage(position);
+    // };
 
     const renderViewPagerPage = (pageNumber: any) => {
         switch (pageNumber) {
@@ -121,22 +113,17 @@ export default function Stepper(props) {
         switch (pageNumber) {
             case 0: {
                 return (
-                    "Créer votre compte"
+                    "Données personnelles"
                 );
             }
             case 1: {
                 return (
-                   "Sport pratiqués"
+                   "Centres d'intêrets"
                 );
             }
             case 2: {
                 return (
-                    "Données personnelles"
-                );
-            }
-            case 3: {
-                return (
-                    "Centres d'intêrets"
+                    "Sport pratiqués"
                 );
             }
             default: {
@@ -147,7 +134,7 @@ export default function Stepper(props) {
 
     const incrementPage = (data: any) => {
         setCurrentPage(currentPage + 1);
-        currentTitle = 'tot'
+        setTitle(findCurrentTitle(currentPage));
     };
 
     const renderStepIndicator = (params: any) => (
