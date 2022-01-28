@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
-import {PageTitle, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../assets/styles/styles";
+import {Buttontext, PageTitle, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../assets/styles/styles";
 import Signin from "../login/signin/Signin";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
@@ -11,13 +11,20 @@ import {useEffect, useState} from "react";
 import ListItems from '../../components/ListItems';
 import {Colors} from "../../../assets/styles/colors";
 import LinearGradient from "react-native-linear-gradient";
+import {useAuth} from "../../hooks/Auth";
 
 const Home = ({navigation}) => {
     const [item, setItem] = useState(null);
     //const [user, setUser] = useState(null)
+    const auth = useAuth('@user','user')
+    const [data, setData] = useAuth('@user','user')
+    console.log('TEST HOOK AUTH', data.email)
 
+    /*
     AsyncStorage.getItem("@user").then((value) => { setItem(value)})
     console.log('result', JSON.parse(item))
+
+     */
 
 
     // @ts-ignore

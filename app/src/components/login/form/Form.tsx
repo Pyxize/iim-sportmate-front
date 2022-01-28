@@ -11,6 +11,13 @@ interface FormData {
     email: string;
     password: string;
 }
+export const signin = async (email, password) => {
+    const response = await axios.post('https://sportmate-develop.herokuapp.com/api/login',
+        email,
+        password
+    )
+    console.log('form resp', response.data)
+}
 
 
 const Form = () => {
@@ -19,16 +26,24 @@ const Form = () => {
 
 
     const onSubmit = (data: any) => {
+        signin(data).then(
+            () => {
+                navigation.navigate('Home')
+            }
+        )
+    }
 
+/*
+    const onSubmit = (data: any) => {
         AuthService.login(data).then(
             () => {
                 // @ts-ignore
                 navigation.navigate('Home');
             }
         )
-
-
     }
+
+ */
 
     return (
         <View>

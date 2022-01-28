@@ -32,9 +32,9 @@ export default class ListItems extends React.Component {
 
         axios.get(`https://sportmate-develop.herokuapp.com/api/activity/all`, config)
             .then(res => {
-                console.log(res.data)
+               // console.log(res.data)
                 const activities = res.data;
-                console.log(activities)
+                //console.log(activities)
                 this.setState({ activities: activities });
             })
             .catch(error => {

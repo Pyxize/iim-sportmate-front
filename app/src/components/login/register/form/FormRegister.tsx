@@ -7,10 +7,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useNavigation} from "@react-navigation/native";
 import AuthService from '../../../../services/auth.service'
 import {useState} from "react";
+import axios from "axios";
+import {login} from "../../form/Form";
 
 interface FormData {
     email: string;
     password: string;
+}
+
+export const signup = async (email, password) => {
+    const response = await axios.post('https://sportmate-develop.herokuapp.com/api/signin',
+        email,
+        password
+    )
+    console.log('form register resp',response.data)
 }
 
 const FormRegister = () => {
@@ -18,11 +28,22 @@ const FormRegister = () => {
     const {control, register, handleSubmit, formState: {errors, isSubmitSuccessful}} = useForm<FormData>();
 
     const onSubmit = (data: any) => {
+        signup(data).then(
+            () => {
+                navigation.navigate('Home')
+            }
+        )
+    }
+
+    /*
+    const onSubmit = (data: any) => {
         AuthService.register(data).then(
             () => {
             navigation.navigate('Signin');
         })
     }
+
+     */
 
     return (
         <View>

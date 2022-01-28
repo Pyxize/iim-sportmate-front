@@ -1,16 +1,68 @@
-import axios from 'axios';
-import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import { ListItem, Text } from 'react-native-elements';
+import axios, { AxiosRequestConfig } from 'axios';
+import React, {useEffect, useState} from "react";
+import {StyleSheet, View} from "react-native";
+import {ListItem, Text} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PrimaryButton, IconBtn, WrappedView } from '../../assets/styles/styles';
+import {PrimaryButton, IconBtn, WrappedView} from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from "@expo/vector-icons/Ionicons"
-import { Colors } from '../../assets/styles/colors'
-import { useNavigation } from "@react-navigation/native";
+import {Colors} from '../../assets/styles/colors'
+import {useNavigation} from "@react-navigation/native";
 
+const ListItemsHistory = () => {
+    const [activities, setActivities] = useState([])
+    const [errorMessage, setErrorMessage] = useState('')
+    const [token, setToken] = useState('')
+    let config: any;
+
+   const user = AsyncStorage.getItem("@user").then((value) => {
+       setToken(value);
+   })
+    if (user){
+        let getToken = token.split(",")[1].split(":")[1];
+        token.substring(1, token.length - 2);
+        console.log('token', getToken)
+        config = {
+            headers: { Authorization: "Bearer " + getToken }
+        }
+    }
+
+
+    useEffect(() => {
+
+        axios.get(`https://sportmate-develop.herokuapp.com/api/activity/user`, config)
+            .then(res => {
+                //console.log(res.data = setActivities)
+               // const activities = res.data;
+                //console.log('useState Activities: ', setActivities)
+               // this.setState({ activities: activities });
+            })
+            .catch(error => {
+                console.log("ERREUR lors de l'appel à activity/user: ", error);
+                error = error.toString();
+                if (error.includes('403')) {
+                    setErrorMessage = "oups vous n'êtes pas autorisé"
+                  //  this.setState({ errorMessage: "Oups vous n'êtes pas autorisé" });
+                } else {
+                    this.setState({ errorMessage: error });
+                }
+                return error;
+            });
+    }, [setActivities])
+
+    return(
+        <View>
+            <Text>Coucou</Text>
+        </View>
+    )
+
+
+}
+
+
+/*
 class ListItemsHistory extends React.Component {
     state = {
         activities: [],
@@ -26,7 +78,7 @@ class ListItemsHistory extends React.Component {
     async componentDidUpdate() {
         const commejeveux = setTimeout(() => {
             this.callToSave()
-        }, 2000);
+        }, 10000);
         
         return () => clearTimeout(commejeveux)
     }
@@ -120,6 +172,11 @@ class ListItemsHistory extends React.Component {
             </View>)
     };
 }
+
+ */
+
+
+
 const styles = StyleSheet.create({
     wrapped: {
         marginBottom: 50,
@@ -144,9 +201,13 @@ function isDateInPast(date: { toString: () => string | number | Date; }) {
     const dateInput = new Date(date.toString())
     return dateInput.getTime() < today.getTime();
 }
-
+/*
 export default function() {
     const navigation = useNavigation();
   
     return <ListItemsHistory navigation={navigation} />
 }
+
+
+ */
+export default ListItemsHistory;
