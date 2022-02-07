@@ -5,6 +5,7 @@ import StepIndicator from 'react-native-step-indicator';
 import { Buttontext, PrimaryButton, WrappedView, StyledContainer, SafeAreaWrapped } from '../../../../assets/styles/styles';
 import Form from '../form/Form';
 import FormRegister from './form/FormRegister';
+import SportRegister from './form/SportRegister';
 import UserRegister from './form/UserRegister';
 
 // const PAGES = ["Auth", "User", "Hoobies", "Sport"];
@@ -91,7 +92,7 @@ export default function Stepper({ setTitle }) {
             }
             case 1: {
                 return (
-                    <Form />
+                    <SportRegister />
                 );
             }
             case 2: {
