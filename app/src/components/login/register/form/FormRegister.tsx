@@ -37,7 +37,7 @@ export default function FormRegister({ setUserData, setCurrentPage, setNextTitle
             setError("email", {
                 message: "Format du mail incorrect",
             });
-            return true;
+            return false;
         }
         return true;
     }
