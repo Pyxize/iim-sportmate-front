@@ -18,12 +18,34 @@ type FormData = {
     mobile: string;
 }
 
-const UserRegister = () => {
-    const navigation = useNavigation()
-    const { control, register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
+const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
+    const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+    
     const onSubmit = (data: any) => {
+        console.log("onSubmit KLKKLKL")
+        if (validatePhone(data.mobile)) {
+            console.log("Submit FormUser with data ", data)
+            setUserData(data);
+            setCurrentPage(3)
+            setNextTitle("Centres d'intêrets")
+        }
+    }
 
+    const validatePhoneRegex = (mobile: string) => {
+        var regex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/;
+        return regex.test(mobile);
+    }
+
+    const validatePhone = (value: string) => {
+        if (!validatePhoneRegex(value)) {
+            console.log("Tel non valide")
+            setError("mobile", {
+                message: "Format du téléphone incorrect",
+            });
+            return false;
+        }
+        return true;
     }
 
     const [sexRadio, setSexRadio] = useState([
@@ -36,8 +58,8 @@ const UserRegister = () => {
         <SafeAreaView>
             <View>
                 <View>
-                    {errors.profilepPicture && <Text style={styles.textError}>{errors.profilepPicture.message}</Text>}
                     <Text style={styles.FormLabel}>Image Profile: </Text>
+                    {errors.profilepPicture && <Text style={styles.textError}>{errors.profilepPicture.message}</Text>}
                     <Controller
                         name="profilepPicture"
                         control={control}
@@ -46,8 +68,8 @@ const UserRegister = () => {
                         )}
                     />
 
-                    {errors.firstName && <Text style={styles.textError}>{errors.firstName.message}</Text>}
                     <Text style={styles.FormLabel}>Prénom: </Text>
+                    {errors.firstName && <Text style={styles.textError}>{errors.firstName.message}</Text>}
                     <Controller
                         name="firstName"
                         control={control}
@@ -64,8 +86,8 @@ const UserRegister = () => {
                         )}
                     />
 
-                    {errors.lastName && <Text style={styles.textError}>{errors.lastName.message}</Text>}
                     <Text style={styles.FormLabel}>Nom: </Text>
+                    {errors.lastName && <Text style={styles.textError}>{errors.lastName.message}</Text>}
                     <Controller
                         name="lastName"
                         control={control}
@@ -82,8 +104,8 @@ const UserRegister = () => {
                         )}
                     />
 
-                    {errors.sex && <Text style={styles.textError}>{errors.sex.message}</Text>}
                     <Text style={styles.FormLabel}>Sex: </Text>
+                    {errors.sex && <Text style={styles.textError}>{errors.sex.message}</Text>}
                     <Controller
                         control={control}
                         rules={{
@@ -107,8 +129,8 @@ const UserRegister = () => {
                         name="sex"
                     />
 
-                    {errors.birthday && <Text style={styles.textError}>{errors.birthday.message}</Text>}
                     <Text style={styles.FormLabel}>Date da naissance: </Text>
+                    {errors.birthday && <Text style={styles.textError}>{errors.birthday.message}</Text>}
                     <Controller
                         control={control}
                         render={({ field: { onChange, onBlur, value } }) => (
@@ -145,8 +167,8 @@ const UserRegister = () => {
                         name="birthday"
                     />
 
-                    {errors.mobile && <Text style={styles.textError}>{errors.mobile.message}</Text>}
                     <Text style={styles.FormLabel}>Téléphone: </Text>
+                    {errors.mobile && <Text style={styles.textError}>{errors.mobile.message}</Text>}
                     <Controller
                         name="mobile"
                         control={control}
@@ -165,7 +187,7 @@ const UserRegister = () => {
                 </View>
                 <WrappedView style={{ marginLeft: 64, marginRight: 64 }}>
                     <PrimaryButton onPress={handleSubmit(onSubmit)}>
-                        <Buttontext>S'inscrire</Buttontext>
+                        <Buttontext>Suivant</Buttontext>
                     </PrimaryButton>
                 </WrappedView>
             </View>
@@ -179,9 +201,10 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     textError: {
-        marginLeft: 16,
-        marginBottom: 16,
-        color: '#eb4d4b',
+        marginTop: 12,
+        marginLeft: 20,
+        color: Colors.primary,
+        fontWeight: 'bold'
     },
     input: {
         margin: 16,

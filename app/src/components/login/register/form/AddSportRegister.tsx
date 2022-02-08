@@ -1,35 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Buttontext, IconBtn, PrimaryButton, WrappedView } from '../../../../../assets/styles/styles';
 import Ionicons from "@expo/vector-icons/Ionicons"
-import { Text } from 'react-native';
 import SportRegisterComponent from './SportRegisterComponent';
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
 type FormData = {
     sports: []
 }
 
+let sportsData: { level: string; sport: string; }[] = [];
 
 export default function AddSportRegister({ setSportsData, setCurrentPage, setNextTitle }) {
     const { control, register, handleSubmit, setValue, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
-    
-    const [data, setData] = useState();
-    const [title, setTitle] = useState();
-    const [page, setPage] = useState();
 
-    const [inputList, setInputList] = useState([<SportRegisterComponent setData={setSportsData} />]);
+    const [level, setLevel] = useState();
+    const [sport, setSport] = useState();
 
-    const onAddBtnClick = event => {
-        setInputList(inputList.concat(<SportRegisterComponent setData={setSportsData}/>));
+    const [inputList, setInputList] = useState([<SportRegisterComponent setLevel={setLevel} setSport={setSport} />]);
+
+    const onAddBtnClick = () => {
+        console.log("onAddBtnClick before", sportsData)
+        setInputList(inputList.concat(<SportRegisterComponent setLevel={setLevel} setSport={setSport} />));
+        sportsData.push({ "level": level, "sport": sport })
+        
+        console.log(" onAddBtnClick Submit Sportuser with level ", level)
+        console.log(" onAddBtnClick Submit Sportuser with sport ", sport)
+        console.log("onAddBtnClick Submit Sportuser with sportsData", sportsData)
     };
 
     const onSubmit = (data: any) => {
-        console.log("Submit Sportuser with data ", data)
-        setSportsData(data)
+        console.log("onSubmit before", sportsData)
+        sportsData.push({ "level": level, "sport": sport })
+
+        console.log("onSubmit Submit Sportuser with level ", level)
+        console.log("onSubmit Submit Sportuser with sport ", sport)
+        console.log("onSubmit Submit Sportuser with sportsData", sportsData)
+        
+        setSportsData(sportsData)
         setCurrentPage(2)
         setNextTitle("Données personnelles")
     }
-    
+
     return (
         <WrappedView>
             {inputList}

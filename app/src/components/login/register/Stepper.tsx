@@ -2,12 +2,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
-import { Buttontext, PrimaryButton, WrappedView, StyledContainer, SafeAreaWrapped } from '../../../../assets/styles/styles';
-import Form from '../form/Form';
 import FormRegister from './form/FormRegister';
 import AddSportRegister from './form/AddSportRegister';
 import UserRegister from './form/UserRegister';
 import { useState } from 'react';
+import HobbiesRegister from './form/HobbiesRegister';
 
 // const PAGES = ["Auth", "User", "Hoobies", "Sport"];
 const labels = ["Identification", "Sport", "Données personnelles", "Centres d'intêret"];
@@ -78,8 +77,10 @@ const getStepIndicatorIconConfig = ({
 
 
 export default function Stepper({ setTitle }) {
-    const [userData, setUserData] = useState();
+    const [authData, setAuthData] = useState();
     const [sportsData, setSportsData] = useState();
+    const [userData, setUserData] = useState();
+    const [hobbiesData, setHobbiesData] = useState();
     
     const [nextTitle, setNextTitle] = useState();
     const [currentPage, setCurrentPage] = useState(0);
@@ -89,7 +90,7 @@ export default function Stepper({ setTitle }) {
         switch (pageNumber) {
             case 0: {
                 return (
-                    <FormRegister setUserData={setUserData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
+                    <FormRegister setAuthData={setAuthData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
                 );
             }
             case 1: {
@@ -100,13 +101,13 @@ export default function Stepper({ setTitle }) {
             case 2: {
                 return (
                     <ScrollView>
-                        <UserRegister />
+                        <UserRegister setUserData={setUserData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
                     </ScrollView>
                 );
             }
             case 3: {
                 return (
-                    <AddSportRegister />
+                    <HobbiesRegister setHobbiesData={setHobbiesData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
                 );
             }
             default: {

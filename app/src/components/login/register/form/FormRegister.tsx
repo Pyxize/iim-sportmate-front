@@ -1,26 +1,23 @@
 import * as React from 'react'
-import { Controller, useForm, useFormState } from "react-hook-form"
-import { Text, View, TextInput, Alert, StyleSheet } from "react-native";
+import { Controller, useForm } from "react-hook-form"
+import { Text, View, TextInput, StyleSheet } from "react-native";
 import { Colors } from '../../../../../assets/styles/colors'
 import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import AuthService from '../../../../services/auth.service'
-import { useState } from "react";
 
 interface FormData {
     email: string;
     password: string;
 }
 
-export default function FormRegister({ setUserData, setCurrentPage, setNextTitle }) {
+export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle }) {
     const navigation = useNavigation()
     const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
     const onSubmit = (data: any) => {
         if (validateEmail(data.email)) {
-            console.log("Submit Formuser with data ", data)
-            setUserData(data);
+            console.log("Submit FormAuth with data ", data)
+            setAuthData(data);
             setCurrentPage(1)
             setNextTitle("Sport pratiqués")
         }
@@ -37,7 +34,7 @@ export default function FormRegister({ setUserData, setCurrentPage, setNextTitle
             setError("email", {
                 message: "Format du mail incorrect",
             });
-            return false;
+            return true;
         }
         return true;
     }

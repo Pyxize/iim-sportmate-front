@@ -2,23 +2,18 @@ import { Controller, useForm } from "react-hook-form"
 import { Text, View, StyleSheet } from "react-native";
 import React, { useState } from 'react';
 import RNPickerSelect from "react-native-picker-select";
-import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "../../../../../assets/styles/colors";
-import { Buttontext, IconBtn, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
-import { Rating, AirbnbRating } from 'react-native-ratings';
-import Ionicons from "@expo/vector-icons/Ionicons"
+import { AirbnbRating } from 'react-native-ratings';
 
 type FormData = {
     sport: string;
     level: string;
 }
 
-const SportRegisterComponent = (setData) => {
-    const { control, register, handleSubmit, setValue, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+const SportRegisterComponent = ({setLevel, setSport}) => {
+    const { control, register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
-    setValue('level', 'Débutant')
-    
+
     // const onSubmit = (data: any) => {
     //     console.log("Submit Sportuser with data ", data)
     //     setData(data)
@@ -27,22 +22,27 @@ const SportRegisterComponent = (setData) => {
     // }
 
     const [itemSport, setItemSport] = useState([
-        { label: 'Course', value: 'Course à pied' },
+        { label: 'Course à pied', value: 'Course à pied' },
         { label: 'Natation', value: 'Natation' },
     ]);
 
-    const ratingCompleted = (rating) => {
+    const ratingCompleted = (rating: any) => {
         switch (rating) {
             case 1:
-                setValue('level', 'Débutant')
+                setLevel('Débutant')
                 break
             case 2:
-                setValue('level', 'Intermédiaire')
+                setLevel('Intermédiaire')
                 break
             case 3:
-                setValue('level', 'Confirmé')
+                setLevel('Confirmé')
                 break
         }
+    }
+
+    const updateSport = (sport: any) => {
+        console.log("je met a jour sport avec ", sport)
+        setSport(sport)
     }
 
     const MEDAL_IMAGE = require('../../../../../assets/img/medal.png')
@@ -60,7 +60,7 @@ const SportRegisterComponent = (setData) => {
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <RNPickerSelect
-                            onValueChange={onChange}
+                            onValueChange={updateSport}
                             items={itemSport}
                             style={{ ...pickerSelectStyles }}
                         />
