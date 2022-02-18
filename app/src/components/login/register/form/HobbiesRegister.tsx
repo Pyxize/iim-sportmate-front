@@ -4,6 +4,7 @@ import { Text, View, StyleSheet } from "react-native";
 import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
 import { useNavigation } from "@react-navigation/native";
 import HobbiesButton from './HobbiesButton';
+import axios from 'axios';
 
 
 interface FormData {
@@ -19,6 +20,22 @@ export default function HobbiesRegister({ setHobbiesData, setCurrentPage, setNex
         setHobbiesData(hobbies);
         setCurrentPage(4)
         setNextTitle("Fin")
+        axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data)
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+                navigation.navigate('Home');
+            })
+            .catch(error => {
+                console.log("ERREUR lors de l'appel à activity/user: ", error);
+                error = error.toString();
+                if (error.includes('403')) {
+                    errorMessage = "Oups vous n'êtes pas autorisé";
+                } else {
+                    errorMessage = error;
+                }
+                return errorMessage;
+            });
     }
 
     let hobbies: string[] = [];

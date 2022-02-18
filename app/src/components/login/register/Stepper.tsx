@@ -116,35 +116,6 @@ export default function Stepper({ setTitle }) {
         }
     };
 
-    // const findCurrentTitle = (pageNumber: number) => {
-    //     console.log("Je suis dans le stepper avec user data = ", userData)
-    //     switch (pageNumber) {
-    //         case 0: {
-    //             return (
-    //                 "Sport pratiqués"
-    //             );
-    //         }
-    //         case 1: {
-    //             return (
-    //                 "Données personnelles"
-    //             );
-    //         }
-    //         case 2: {
-    //             return (
-    //                 "Centres d'intêrets"
-    //             );
-    //         }
-    //         default: {
-    //             break;
-    //         }
-    //     }
-    // };
-
-    // const incrementPage = (data: any) => {
-    //     setCurrentPage(currentPage + 1);
-    //     setTitle(findCurrentTitle(currentPage));
-    // };
-
     const renderStepIndicator = (params: any) => (
         <MaterialIcons {...getStepIndicatorIconConfig(params)} />
     );
@@ -155,8 +126,6 @@ export default function Stepper({ setTitle }) {
                 <StepIndicator
                     customStyles={secondIndicatorStyles}
                     currentPosition={currentPage}
-                    // onPress={onStepPress}
-                    // renderLabel={renderLabel}
                     renderStepIndicator={renderStepIndicator}
                     labels={labels}
                     stepCount={stepCount}
@@ -164,11 +133,6 @@ export default function Stepper({ setTitle }) {
 
             </View>
             {renderViewPagerPage(currentPage)}
-            {/* <WrappedView style={styles.stepIndicator}>
-                <PrimaryButton onPress={() => incrementPage(currentPage + 1)} style={styles.button}>
-                    <Buttontext on>Suivant</Buttontext>
-                </PrimaryButton>
-            </WrappedView> */}
         </View>
     );
 }
