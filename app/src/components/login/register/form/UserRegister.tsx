@@ -10,12 +10,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import UploadImage from "./UploadImage";
 
 type FormData = {
-    profilepPicture: string;
+    profilePicture: string;
     firstName: string;
     lastName: string;
-    sex: string;
+    genre: string;
     birthday: string;
-    mobile: string;
+    mobilePhone: string;
 }
 
 
@@ -24,7 +24,13 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
     
     const onSubmit = (data: any) => {
         console.log("onSubmit KLKKLKL")
-        if (validatePhone(data.mobile)) {
+        if (validatePhone(data.mobilePhone)) {
+            if(data.profilePicture == undefined) {
+                data.profilePicture = null;
+            }
+            if(data.genre == undefined) {
+                data.genre = "FEMME";
+            }
             console.log("Submit FormUser with data ", data)
             setUserData(data);
             setCurrentPage(3)
@@ -40,7 +46,7 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
     const validatePhone = (value: string) => {
         if (!validatePhoneRegex(value)) {
             console.log("Tel non valide")
-            setError("mobile", {
+            setError("mobilePhone", {
                 message: "Format du téléphone incorrect",
             });
             return false;
@@ -49,8 +55,8 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
     }
 
     const [sexRadio, setSexRadio] = useState([
-        { label: 'Femme', value: 'femme' },
-        { label: 'Homme', value: 'homme' },
+        { label: 'Femme', value: 'FEMME' },
+        { label: 'Homme', value: 'HOMME' },
     ]);
     const [date, setDate] = useState(new Date());
 
@@ -59,12 +65,12 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
             <View>
                 <View>
                     <Text style={styles.FormLabel}>Image Profile: </Text>
-                    {errors.profilepPicture && <Text style={styles.textError}>{errors.profilepPicture.message}</Text>}
+                    {errors.profilePicture && <Text style={styles.textError}>{errors.profilePicture.message}</Text>}
                     <Controller
-                        name="profilepPicture"
+                        name="profilePicture"
                         control={control}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <UploadImage />
+                            <UploadImage setImage={onChange} />
                         )}
                     />
 
@@ -104,13 +110,10 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                         )}
                     />
 
-                    <Text style={styles.FormLabel}>Sex: </Text>
-                    {errors.sex && <Text style={styles.textError}>{errors.sex.message}</Text>}
+                    <Text style={styles.FormLabel}>Genre: </Text>
+                    {errors.genre && <Text style={styles.textError}>{errors.genre.message}</Text>}
                     <Controller
                         control={control}
-                        rules={{
-                            required: true,
-                        }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <RadioForm style={styles.radioForm}
                                 radio_props={sexRadio}
@@ -126,7 +129,7 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                                 }}
                             />
                         )}
-                        name="sex"
+                        name="genre"
                     />
 
                     <Text style={styles.FormLabel}>Date da naissance: </Text>
@@ -168,9 +171,9 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                     />
 
                     <Text style={styles.FormLabel}>Téléphone: </Text>
-                    {errors.mobile && <Text style={styles.textError}>{errors.mobile.message}</Text>}
+                    {errors.mobilePhone && <Text style={styles.textError}>{errors.mobilePhone.message}</Text>}
                     <Controller
-                        name="mobile"
+                        name="mobilePhone"
                         control={control}
                         rules={{
                             required: 'Le numéro de téléphone est obligatoire'

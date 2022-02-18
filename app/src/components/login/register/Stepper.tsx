@@ -7,6 +7,10 @@ import AddSportRegister from './form/AddSportRegister';
 import UserRegister from './form/UserRegister';
 import { useState } from 'react';
 import HobbiesRegister from './form/HobbiesRegister';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { Text } from 'react-native-elements';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // const PAGES = ["Auth", "User", "Hoobies", "Sport"];
 const labels = ["Identification", "Sport", "Données personnelles", "Centres d'intêret"];
@@ -109,6 +113,50 @@ export default function Stepper({ setTitle }) {
                 return (
                     <HobbiesRegister setHobbiesData={setHobbiesData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
                 );
+            }
+            case 4: {
+                setCurrentPage(5);
+                setNextTitle("Créer votre compte");
+                const navigation = useNavigation()
+                
+                let request: { 
+                    login: {
+                        email: string,
+                        password : string,
+                    },
+                     user : {
+                        lastName : string,
+                        firstName : string,
+                        genre : string,
+                        birthday : string,
+                        mobilePhone : string, 
+                        profilePicture: string,
+                    },
+                     sports : [
+                        {
+                            name : string,
+                            level :  string, 
+                        }
+                    ],
+                     hobbies : [string]
+                    } = { "login": authData, "sports": sportsData, "hobbies": hobbiesData, "user":  userData};
+
+                    console.log(request);
+                axios.post(`https://sportmate-develop.herokuapp.com/api/signingAndLogin`, request)
+                    .then(res => {
+                        console.log(res);
+                        if (res.data.token) {
+                            AsyncStorage.setItem('@user', JSON.stringify(res.data))
+                            navigation.navigate('Home');
+                        }
+                    })
+                    .catch(error => {
+                        console.log("ERREUR lors de l'appel à /signingAndLogin: ", error);
+                        setCurrentPage(0);
+                        setNextTitle("Créer votre compte");
+                        navigation.navigate('Register');
+                        
+                    });
             }
             default: {
                 break;

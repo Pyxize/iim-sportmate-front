@@ -19,23 +19,7 @@ export default function HobbiesRegister({ setHobbiesData, setCurrentPage, setNex
         console.log("Submit FormAuth with data ", hobbies)
         setHobbiesData(hobbies);
         setCurrentPage(4)
-        setNextTitle("Fin")
-        axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-                navigation.navigate('Home');
-            })
-            .catch(error => {
-                console.log("ERREUR lors de l'appel à activity/user: ", error);
-                error = error.toString();
-                if (error.includes('403')) {
-                    errorMessage = "Oups vous n'êtes pas autorisé";
-                } else {
-                    errorMessage = error;
-                }
-                return errorMessage;
-            });
+        setNextTitle("Créer votre compte")
     }
 
     let hobbies: string[] = [];

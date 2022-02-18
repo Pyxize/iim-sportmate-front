@@ -8,7 +8,7 @@ type FormData = {
     sports: []
 }
 
-let sportsData: { level: string; sport: string; }[] = [];
+let sportsData: { level: string; name: string; }[] = [];
 
 export default function AddSportRegister({ setSportsData, setCurrentPage, setNextTitle }) {
     const { control, register, handleSubmit, setValue, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
@@ -21,7 +21,7 @@ export default function AddSportRegister({ setSportsData, setCurrentPage, setNex
     const onAddBtnClick = () => {
         console.log("onAddBtnClick before", sportsData)
         setInputList(inputList.concat(<SportRegisterComponent setLevel={setLevel} setSport={setSport} />));
-        sportsData.push({ "level": level, "sport": sport })
+        sportsData.push({ "level": level, "name": sport })
         
         console.log(" onAddBtnClick Submit Sportuser with level ", level)
         console.log(" onAddBtnClick Submit Sportuser with sport ", sport)
@@ -30,7 +30,7 @@ export default function AddSportRegister({ setSportsData, setCurrentPage, setNex
 
     const onSubmit = (data: any) => {
         console.log("onSubmit before", sportsData)
-        sportsData.push({ "level": level, "sport": sport })
+        sportsData.push({ "level": level, "name": sport })
 
         console.log("onSubmit Submit Sportuser with level ", level)
         console.log("onSubmit Submit Sportuser with sport ", sport)

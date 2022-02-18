@@ -3,8 +3,8 @@ import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function UploadImage() {
-    const [image, setImage] = useState(null);
+export default function UploadImage({setImage}) {
+    const [uploadImage, setUploadImage] = useState(null);
 
     const addImage = async () => {
         console.log("ADD IMAGE");
@@ -20,6 +20,7 @@ export default function UploadImage() {
 
         if (!_image.cancelled) {
             setImage(_image.uri);
+            setUploadImage(_image.uri);
         }
     };
 
@@ -41,11 +42,11 @@ export default function UploadImage() {
     return (
         <View style={imageUploaderStyles.container}>
             {
-                image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
+                uploadImage && <Image source={{ uri: uploadImage }} style={{ width: 100, height: 100 }} />
             }
             <View style={imageUploaderStyles.uploadBtnContainer}>
                 <TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-                    <Text style={imageUploaderStyles.textButton}>{image ? 'Edit' : 'Upload'} Image</Text>
+                    <Text style={imageUploaderStyles.textButton}>{uploadImage ? 'Edit' : 'Upload'} Image</Text>
                     <AntDesign name="camera" size={15} color="black" />
                 </TouchableOpacity>
             </View>

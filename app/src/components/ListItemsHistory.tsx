@@ -26,7 +26,7 @@ class ListItemsHistory extends React.Component {
     async componentDidUpdate() {
         const commejeveux = setTimeout(() => {
             this.callToSave()
-        }, 2000);
+        }, 3600000);
         
         return () => clearTimeout(commejeveux)
     }
