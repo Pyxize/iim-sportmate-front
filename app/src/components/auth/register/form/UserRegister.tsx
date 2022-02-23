@@ -141,7 +141,7 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                                 onDateChange={onChange}
                                 date={date}
                                 mode="date"
-                                minDate={new Date()}
+                                maxDate={new Date()}
                                 format="YYYY-MM-DD"
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
