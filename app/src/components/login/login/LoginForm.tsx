@@ -1,27 +1,31 @@
 import * as React from 'react'
-import { Controller, useForm } from "react-hook-form"
-import { View, TextInput, Text, StyleSheet } from "react-native";
-import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
-import { useNavigation } from "@react-navigation/native";
-import { TextError, TextLabel, formStyles } from '../../../../../assets/styles/form';
-import { Colors } from '../../../../../assets/styles/colors';
-import { validateEmailRegex, validatePasswordRegex } from '../../../../../assets/regex/regex';
+import {Controller, useForm} from "react-hook-form"
+import {Text, View, TextInput, StyleSheet} from "react-native";
+import {Colors} from '../../../../assets/styles/colors'
+import {Buttontext, PrimaryButton, WrappedView} from "../../../../assets/styles/styles";
+import {useNavigation} from "@react-navigation/native";
+import AuthService from '../../../services/auth.service'
+import { validateEmailRegex } from '../../../../assets/regex/regex';
 
 interface FormData {
     email: string;
     password: string;
 }
 
-export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle }) {
+
+const LoginForm = () => {
     const navigation = useNavigation()
-    const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+    const {control, register, handleSubmit, setError, formState: {errors, isSubmitSuccessful}} = useForm<FormData>();
+
 
     const onSubmit = (data: any) => {
-        if (validateEmail(data.email) && validatePassword(data.password)) {
-            console.log("Submit FormAuth with data ", data)
-            setAuthData(data);
-            setCurrentPage(1)
-            setNextTitle("Sport pratiqués")
+        if (validateEmail(data.email)) {
+            AuthService.login(data).then(
+                () => {
+                    // @ts-ignore
+                    navigation.navigate('Home');
+                }
+            )
         }
     }
 
@@ -29,16 +33,6 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
         if (!validateEmailRegex(value)) {
             setError("email", {
                 message: "Format du mail incorrect",
-            });
-            return false;
-        }
-        return true;
-    }
-
-    const validatePassword = (value: any) => {
-        if (!validatePasswordRegex(value)) {
-            setError("password", {
-                message: "8 caractères minimum attendu avec une majuscule, une minuscule, un chiffre et un caractère spécial",
             });
             return false;
         }
@@ -56,7 +50,7 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
                     rules={{
                         required: 'L\'email est obligatoire'
                     }}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({field: {onChange, onBlur, value}}) => (
                         <TextInput
                             autoCapitalize="none"
                             style={styles.input}
@@ -74,7 +68,7 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
                     rules={{
                         required: 'Le mot de passe est obligatoire'
                     }}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({field: {onChange, onBlur, value}}) => (
                         <TextInput
                             style={styles.input}
                             onBlur={onBlur}
@@ -85,9 +79,9 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
                     )}
                 />
             </View>
-            <WrappedView style={{ marginLeft: 64, marginRight: 64 }}>
+            <WrappedView>
                 <PrimaryButton onPress={handleSubmit(onSubmit)}>
-                    <Buttontext>Suivant</Buttontext>
+                    <Buttontext>Connexion</Buttontext>
                 </PrimaryButton>
             </WrappedView>
         </View>
@@ -127,3 +121,4 @@ const styles = StyleSheet.create({
     }
 })
 
+export default LoginForm;

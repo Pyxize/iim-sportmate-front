@@ -26,7 +26,7 @@ const Welcome = ({ navigation }) => {
                 </WrappedView>
 
                 <WrappedView>
-                    <PrimaryButton onPress={() => navigation.navigate('Signin')}>
+                    <PrimaryButton onPress={() => navigation.navigate('Login')}>
                             <Buttontext>Connexion</Buttontext>
                     </PrimaryButton>
                     <PrimaryButton onPress={() => navigation.navigate('Register')} style={styles.button}>

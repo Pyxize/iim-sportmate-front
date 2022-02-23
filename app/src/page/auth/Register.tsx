@@ -1,8 +1,9 @@
 import * as React from 'react'
 import {Button, Image, ImageBackground, StyleSheet, Text, View} from "react-native";
-import {Logo, PageTitle, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../../assets/styles/styles";
-import registerBg from '../../../../assets/img/register-bg.png';
-import Stepper from '../../../components/login/register/Stepper';
+import {Logo, PageTitle, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../assets/styles/styles";
+// @ts-ignore
+import registerBg from '../../../assets/img/register-bg.png';
+import Stepper from '../../components/login/register/Stepper';
 import { useState } from 'react';
 
 
