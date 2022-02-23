@@ -1,10 +1,10 @@
 import * as React from 'react'
 import {Button, Image, ImageBackground, SafeAreaView, StyleSheet, Text, View} from "react-native";
 import {Logo, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../assets/styles/styles";
-import LoginForm from "../../components/login/login/LoginForm";
 // @ts-ignore
 import Bg from '../../../assets/img/SportMate_bg_connexion.png';
 import {FormProvider} from "react-hook-form";
+import LoginForm from '../../components/auth/login/LoginForm';
 
 const Login = ({navigation}) => {
 

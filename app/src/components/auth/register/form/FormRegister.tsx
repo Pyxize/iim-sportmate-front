@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { Controller, useForm } from "react-hook-form"
-import { View, TextInput, Text, StyleSheet } from "react-native";
+import { View, TextInput } from "react-native";
 import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
-import { useNavigation } from "@react-navigation/native";
-import { TextError, TextLabel, formStyles } from '../../../../../assets/styles/form';
-import { Colors } from '../../../../../assets/styles/colors';
 import { validateEmailRegex, validatePasswordRegex } from '../../../../../assets/regex/regex';
+import { TextError, TextLabel, formStyles} from '../../../../../assets/styles/form';
 
 interface FormData {
     email: string;
@@ -13,12 +11,17 @@ interface FormData {
 }
 
 export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle }) {
-    const navigation = useNavigation()
-    const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+    const { control, handleSubmit, setError, formState: { errors } } = useForm<FormData>();
 
     const onSubmit = (data: any) => {
-        if (validateEmail(data.email) && validatePassword(data.password)) {
-            console.log("Submit FormAuth with data ", data)
+        let isValid = true
+        if (!validateEmail(data.email)) {
+            isValid = false;
+        }
+        if(!validatePassword(data.password)){
+            isValid = false;
+        }
+        if(isValid){
             setAuthData(data);
             setCurrentPage(1)
             setNextTitle("Sport pratiqués")
@@ -48,8 +51,8 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
     return (
         <View>
             <View>
-                <Text style={styles.FormLabel}>Email: </Text>
-                {errors.email && <Text style={styles.textError}>{errors.email.message}</Text>}
+                <TextLabel>Email: </TextLabel>
+                {errors.email && <TextError>{errors.email.message}</TextError>}
                 <Controller
                     name="email"
                     control={control}
@@ -59,15 +62,15 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
                             autoCapitalize="none"
-                            style={styles.input}
+                            style={formStyles.input}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
                         />
                     )}
                 />
-                <Text style={styles.FormLabel}>Mot de passe: </Text>
-                {errors.password && <Text style={styles.textError}>{errors.password.message}</Text>}
+                <TextLabel>Mot de passe: </TextLabel>
+                {errors.password && <TextError>{errors.password.message}</TextError>}
                 <Controller
                     name="password"
                     control={control}
@@ -76,7 +79,7 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
-                            style={styles.input}
+                            style={formStyles.input}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
@@ -85,45 +88,11 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
                     )}
                 />
             </View>
-            <WrappedView style={{ marginLeft: 64, marginRight: 64 }}>
+            <WrappedView style={formStyles.wrappedView}>
                 <PrimaryButton onPress={handleSubmit(onSubmit)}>
                     <Buttontext>Suivant</Buttontext>
                 </PrimaryButton>
             </WrappedView>
         </View>
     );
-
 }
-const styles = StyleSheet.create({
-    FormLabel: {
-        marginLeft: 16,
-        color: '#fff',
-    },
-    textError: {
-        marginTop: 12,
-        marginLeft: 20,
-        color: Colors.primary,
-        fontWeight: 'bold'
-    },
-    input: {
-        margin: 16,
-        height: 40,
-        borderWidth: 1,
-        borderColor: Colors.primary,
-        borderRadius: 8,
-        padding: 10,
-        color: Colors.white
-    },
-    btn_bg: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 16,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: Colors.primary
-    },
-    textButton: {
-        color: '#fff',
-    }
-})
-
