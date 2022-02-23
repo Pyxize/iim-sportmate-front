@@ -8,6 +8,7 @@ import { Colors } from "../../../../../assets/styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UploadImage from "./UploadImage";
 import { TextError, TextLabel, formStyles } from "../../../../../assets/styles/form";
+import { format, parseISO } from "date-fns";
 
 type FormData = {
     profilePicture: string;
@@ -23,7 +24,8 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
     const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
     const onSubmit = (data: any) => {
-        console.log("onSubmit KLKKLKL")
+        console.log("onSubmit UserRegister with data", data)
+        console.log("onSubmit date", date)
         if (validatePhone(data.mobilePhone)) {
             if (data.profilePicture == undefined) {
                 data.profilePicture = null;
@@ -58,7 +60,11 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
         { label: 'Femme', value: 'FEMME' },
         { label: 'Homme', value: 'HOMME' },
     ]);
-    const [date, setDate] = useState(new Date());
+
+
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
+
 
     return (
         <SafeAreaView>
@@ -137,12 +143,13 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                     <Controller
                         control={control}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <DatePicker style={formStyles.datePickerStyle}
-                                onDateChange={onChange}
-                                date={date}
-                                mode="date"
+                            <DatePicker
+                                style={formStyles.datePickerStyle}
+                                date={date} //initial date from state
+                                mode="date" //The enum of date, datetime and time
+                                placeholder="select date"
+                                format="DD-MM-YYYY"
                                 maxDate={new Date()}
-                                format="YYYY-MM-DD"
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 customStyles={{
@@ -164,6 +171,10 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                                         borderBottomWidth: 0,
                                     }
 
+                                }}
+                                onDateChange={(newDate) => {
+                                    setDate(newDate);
+                                    onChange(newDate.split('-').reverse().join('-'));
                                 }}
                             />
                         )}

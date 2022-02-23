@@ -11,7 +11,7 @@ import axios from 'axios';
 import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextLabel, TextError, formStyles} from "../../../assets/styles/form";
+import { TextLabel, TextError, formStyles } from "../../../assets/styles/form";
 
 type FormData = {
     activityName: string;
@@ -72,7 +72,7 @@ const Form = () => {
         { label: 'Course', value: 'Course à pied' },
         { label: 'Natation', value: 'Natation' },
     ]);
-   
+
 
     return (
         <SafeAreaView>
@@ -151,11 +151,14 @@ const Form = () => {
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <DatePicker style={formStyles.datePickerStyle}
-                            onDateChange={onChange}
+                            onDateChange={(newDate) => {
+                                setDate(newDate);
+                                onChange(newDate.split('-').reverse().join('-'));
+                            }}
                             date={date}
                             mode="date"
                             minDate={new Date()}
-                            format="YYYY-MM-DD"
+                            format="DD-MM-YYYY"
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{

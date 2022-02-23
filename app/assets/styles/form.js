@@ -3,13 +3,13 @@ import {Colors} from './colors'
 import {StyleSheet } from "react-native";
 
 export const TextLabel = styled.Text`
-    margin-left: 16;
+    margin-left: 16px;
     color: ${Colors.white};
 `
 
 export const TextError = styled.Text`
-    margin-top: 12;
-    margin-left: 20;
+    margin-top: 12px;
+    margin-left: 20px;
     color: ${Colors.primary};
     font-weight: bold;
 `
