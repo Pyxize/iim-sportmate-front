@@ -23,7 +23,6 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
     const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
     const onSubmit = (data: any) => {
-        console.log("onSubmit KLKKLKL")
         if (validatePhone(data.mobilePhone)) {
             if (data.profilePicture == undefined) {
                 data.profilePicture = null;
@@ -58,7 +57,9 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
         { label: 'Femme', value: 'FEMME' },
         { label: 'Homme', value: 'HOMME' },
     ]);
-    const [date, setDate] = useState(new Date());
+
+
+    const [date, setDate] = useState(new Date())
 
     return (
         <SafeAreaView>
@@ -137,12 +138,13 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                     <Controller
                         control={control}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <DatePicker style={formStyles.datePickerStyle}
-                                onDateChange={onChange}
+                            <DatePicker
+                                style={formStyles.datePickerStyle}
                                 date={date}
                                 mode="date"
-                                minDate={new Date()}
-                                format="YYYY-MM-DD"
+                                placeholder="select date"
+                                format="DD-MM-YYYY"
+                                maxDate={new Date()}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 customStyles={{
@@ -164,6 +166,10 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                                         borderBottomWidth: 0,
                                     }
 
+                                }}
+                                onDateChange={(newDate) => {
+                                    setDate(newDate);
+                                    onChange(newDate.split('-').reverse().join('-'));
                                 }}
                             />
                         )}
