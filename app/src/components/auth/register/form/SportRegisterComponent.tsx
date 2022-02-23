@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import RNPickerSelect from "react-native-picker-select";
 import { Colors } from "../../../../../assets/styles/colors";
 import { AirbnbRating } from 'react-native-ratings';
+import { TextError, TextLabel } from "../../../../../assets/styles/form";
 
 type FormData = {
     sport: string;
@@ -12,14 +13,6 @@ type FormData = {
 
 const SportRegisterComponent = ({setLevel, setSport}) => {
     const { control, register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
-
-
-    // const onSubmit = (data: any) => {
-    //     console.log("Submit Sportuser with data ", data)
-    //     setData(data)
-    //     setPage(2)
-    //     setTitle("Données personnelles")
-    // }
 
     const [itemSport, setItemSport] = useState([
         { label: 'Course à pied', value: 'Course à pied' },
@@ -50,8 +43,8 @@ const SportRegisterComponent = ({setLevel, setSport}) => {
 
     return (
         <View>
-            <Text style={styles.FormLabel}>Sport: </Text>
-            {errors.sport && <Text style={styles.textError}>{errors.sport.message}</Text>}
+            <TextLabel>Sport: </TextLabel>
+            {errors.sport && <TextError>{errors.sport.message}</TextError>}
             <View style={{ flexDirection: 'row', marginLeft: 10 }}>
                 <Controller
                     control={control}
@@ -88,26 +81,6 @@ const SportRegisterComponent = ({setLevel, setSport}) => {
     );
 
 }
-const styles = StyleSheet.create({
-    FormLabel: {
-        marginLeft: 16,
-        color: '#fff',
-    },
-    textError: {
-        marginTop: 12,
-        marginLeft: 20,
-        color: Colors.primary,
-        fontWeight: 'bold'
-    },
-    input: {
-        height: 40,
-        borderWidth: 1,
-        borderColor: Colors.primary,
-        borderRadius: 8,
-        padding: 10,
-        color: Colors.white
-    }
-})
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {

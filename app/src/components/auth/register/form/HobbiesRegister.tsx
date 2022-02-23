@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { useForm } from "react-hook-form"
-import { Text, View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
-import { useNavigation } from "@react-navigation/native";
 import HobbiesButton from './HobbiesButton';
-import axios from 'axios';
+import { TextLabel } from '../../../../../assets/styles/form';
 
 
 interface FormData {
@@ -12,8 +11,7 @@ interface FormData {
 }
 
 export default function HobbiesRegister({ setHobbiesData, setCurrentPage, setNextTitle }) {
-    const navigation = useNavigation()
-    const { control, register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+    const { handleSubmit } = useForm<FormData>();
 
     const onSubmit = (data: any) => {
         console.log("Submit FormAuth with data ", hobbies)
@@ -34,7 +32,7 @@ export default function HobbiesRegister({ setHobbiesData, setCurrentPage, setNex
     return (
         <View>
             <View>
-                <Text style={styles.FormLabel}>Hobbies: </Text>
+                <TextLabel>Hobbies: </TextLabel>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <HobbiesButton dataParentToChild={cuisineImg} hobbies={hobbies} value='Cuisine'></HobbiesButton>
                     <HobbiesButton dataParentToChild={animauxImg} hobbies={hobbies} value='Animaux'></HobbiesButton>
@@ -57,10 +55,4 @@ export default function HobbiesRegister({ setHobbiesData, setCurrentPage, setNex
     );
 
 }
-const styles = StyleSheet.create({
-    FormLabel: {
-        marginLeft: 16,
-        color: '#fff',
-    }
-})
 

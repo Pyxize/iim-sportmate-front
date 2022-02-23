@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
 import {PageTitle, SafeAreaWrapped, StyledContainer, WrappedView} from "../../../assets/styles/styles";
-import Signin from "../login/signin/Signin";
+import Signin from "../auth/Login";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
 import AuthService from '../../services/auth.service'

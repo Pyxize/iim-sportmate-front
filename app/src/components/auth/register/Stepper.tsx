@@ -12,7 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native-elements';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// const PAGES = ["Auth", "User", "Hoobies", "Sport"];
 const labels = ["Identification", "Sport", "Données personnelles", "Centres d'intêret"];
 
 
@@ -85,7 +84,7 @@ export default function Stepper({ setTitle }) {
     const [sportsData, setSportsData] = useState();
     const [userData, setUserData] = useState();
     const [hobbiesData, setHobbiesData] = useState();
-    
+
     const [nextTitle, setNextTitle] = useState();
     const [currentPage, setCurrentPage] = useState(0);
     const stepCount = 4
@@ -94,54 +93,54 @@ export default function Stepper({ setTitle }) {
         switch (pageNumber) {
             case 0: {
                 return (
-                    <FormRegister setAuthData={setAuthData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
+                    <FormRegister setAuthData={setAuthData} setCurrentPage={setCurrentPage} setNextTitle={setTitle} />
                 );
             }
             case 1: {
                 return (
-                    <AddSportRegister setSportsData={setSportsData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
+                    <AddSportRegister setSportsData={setSportsData} setCurrentPage={setCurrentPage} setNextTitle={setTitle} />
                 );
             }
             case 2: {
                 return (
                     <ScrollView>
-                        <UserRegister setUserData={setUserData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
+                        <UserRegister setUserData={setUserData} setCurrentPage={setCurrentPage} setNextTitle={setTitle} />
                     </ScrollView>
                 );
             }
             case 3: {
                 return (
-                    <HobbiesRegister setHobbiesData={setHobbiesData} setCurrentPage={setCurrentPage} setNextTitle={setTitle}/>
+                    <HobbiesRegister setHobbiesData={setHobbiesData} setCurrentPage={setCurrentPage} setNextTitle={setTitle} />
                 );
             }
             case 4: {
                 setCurrentPage(5);
                 setNextTitle("Créer votre compte");
                 const navigation = useNavigation()
-                
-                let request: { 
+
+                let request: {
                     login: {
                         email: string,
-                        password : string,
+                        password: string,
                     },
-                     user : {
-                        lastName : string,
-                        firstName : string,
-                        genre : string,
-                        birthday : string,
-                        mobilePhone : string, 
+                    user: {
+                        lastName: string,
+                        firstName: string,
+                        genre: string,
+                        birthday: string,
+                        mobilePhone: string,
                         profilePicture: string,
                     },
-                     sports : [
+                    sports: [
                         {
-                            name : string,
-                            level :  string, 
+                            name: string,
+                            level: string,
                         }
                     ],
-                     hobbies : [string]
-                    } = { "login": authData, "sports": sportsData, "hobbies": hobbiesData, "user":  userData};
+                    hobbies: [string]
+                } = { "login": authData, "sports": sportsData, "hobbies": hobbiesData, "user": userData };
 
-                    console.log(request);
+                console.log(request);
                 axios.post(`https://sportmate-develop.herokuapp.com/api/signingAndLogin`, request)
                     .then(res => {
                         console.log(res);
@@ -155,7 +154,7 @@ export default function Stepper({ setTitle }) {
                         setCurrentPage(0);
                         setNextTitle("Créer votre compte");
                         navigation.navigate('Register');
-                        
+
                     });
             }
             default: {
