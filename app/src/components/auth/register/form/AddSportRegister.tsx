@@ -3,6 +3,7 @@ import { Buttontext, IconBtn, PrimaryButton, WrappedView } from '../../../../../
 import Ionicons from "@expo/vector-icons/Ionicons"
 import SportRegisterComponent from './SportRegisterComponent';
 import { useForm } from "react-hook-form"
+import { TextError } from '../../../../../assets/styles/form';
 
 type FormData = {
     sports: []
@@ -22,20 +23,18 @@ export default function AddSportRegister({ setSportsData, setCurrentPage, setNex
         console.log("onAddBtnClick before", sportsData)
         setInputList(inputList.concat(<SportRegisterComponent setLevel={setLevel} setSport={setSport} />));
         sportsData.push({ "level": level, "name": sport })
-        
+
         console.log(" onAddBtnClick Submit Sportuser with level ", level)
         console.log(" onAddBtnClick Submit Sportuser with sport ", sport)
         console.log("onAddBtnClick Submit Sportuser with sportsData", sportsData)
     };
 
     const onSubmit = (data: any) => {
-        console.log("onSubmit before", sportsData)
-        sportsData.push({ "level": level, "name": sport })
-
-        console.log("onSubmit Submit Sportuser with level ", level)
-        console.log("onSubmit Submit Sportuser with sport ", sport)
+        if (data.sport != undefined) {
+            sportsData.push({ "level": level, "name": sport })
+        }
         console.log("onSubmit Submit Sportuser with sportsData", sportsData)
-        
+
         setSportsData(sportsData)
         setCurrentPage(2)
         setNextTitle("Données personnelles")
@@ -44,12 +43,17 @@ export default function AddSportRegister({ setSportsData, setCurrentPage, setNex
     return (
         <WrappedView>
             {inputList}
+            {(sport != undefined && level == undefined) ? <TextError>Veuillez séléctionner un niveau</TextError> : null}
             <IconBtn onPress={onAddBtnClick}>
                 <Ionicons name='add-circle' size={40} color='#F67201'></Ionicons>
             </IconBtn>
-            <PrimaryButton onPress={handleSubmit(onSubmit)}>
-                <Buttontext>Suivant</Buttontext>
-            </PrimaryButton>
+
+            {(sport != undefined && level == undefined) ? null
+                :
+                <PrimaryButton onPress={handleSubmit(onSubmit)}>
+                    <Buttontext>Suivant</Buttontext>
+                </PrimaryButton>}
+
         </WrappedView>
     );
 };

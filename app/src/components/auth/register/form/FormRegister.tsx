@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form"
 import { View, TextInput } from "react-native";
 import { Buttontext, PrimaryButton, WrappedView } from "../../../../../assets/styles/styles";
 import { validateEmailRegex, validatePasswordRegex } from '../../../../../assets/regex/regex';
-import { TextError, TextLabel, formStyles} from '../../../../../assets/styles/form';
+import { TextError, TextLabel, formStyles } from '../../../../../assets/styles/form';
 
 interface FormData {
     email: string;
@@ -18,10 +18,10 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
         if (!validateEmail(data.email)) {
             isValid = false;
         }
-        if(!validatePassword(data.password)){
+        if (!validatePassword(data.password)) {
             isValid = false;
         }
-        if(isValid){
+        if (isValid) {
             setAuthData(data);
             setCurrentPage(1)
             setNextTitle("Sport pratiqués")
@@ -41,7 +41,7 @@ export default function FormRegister({ setAuthData, setCurrentPage, setNextTitle
     const validatePassword = (value: any) => {
         if (!validatePasswordRegex(value)) {
             setError("password", {
-                message: "8 caractères minimum attendu avec une majuscule, une minuscule, un chiffre et un caractère spécial",
+                message: "8 caractères minimum attendus avec une majuscule, une minuscule, un chiffre et un caractère spécial",
             });
             return false;
         }

@@ -63,6 +63,9 @@ const SportRegisterComponent = ({setLevel, setSport}) => {
 
                 <Controller
                     control={control}
+                    rules={{
+                        required: 'Le niveau est obligatoire'
+                    }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <AirbnbRating
                             starImage={MEDAL_IMAGE}
@@ -71,7 +74,7 @@ const SportRegisterComponent = ({setLevel, setSport}) => {
                             count={3}
                             size={20}
                             selectedColor={Colors.primary}
-                            defaultRating={1}
+                            defaultRating={0}
                         />
                     )}
                     name="level"
