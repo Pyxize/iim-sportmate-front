@@ -1,23 +1,35 @@
 import { Controller, useForm } from "react-hook-form"
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React, { useState } from 'react';
 import RNPickerSelect from "react-native-picker-select";
 import { Colors } from "../../../../../assets/styles/colors";
 import { AirbnbRating } from 'react-native-ratings';
 import { TextError, TextLabel } from "../../../../../assets/styles/form";
+import axios from "axios";
 
 type FormData = {
     sport: string;
     level: string;
 }
 
-const SportRegisterComponent = ({setLevel, setSport}) => {
+const SportRegisterComponent = ({ setLevel, setSport }) => {
     const { control, register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
-    const [itemSport, setItemSport] = useState([
-        { label: 'Course à pied', value: 'Course à pied' },
-        { label: 'Natation', value: 'Natation' },
-    ]);
+    axios.get(`https://sportmate-develop.herokuapp.com/api/sport`)
+        .then(res => {
+            console.log(res.data)
+            const sports = res.data;
+            console.log("Apres l'appel j'ai tous ces sports ", sports)
+            sports.forEach(sport => {
+                itemSport.push({ "label": sport, "value": sport })
+            });
+        })
+        .catch(error => {
+            console.log("ERREUR lors de la récupération de tous les sports: ", error);
+            return error;
+        });
+
+    const [itemSport, setItemSport] = useState([]);
 
     const ratingCompleted = (rating: any) => {
         switch (rating) {

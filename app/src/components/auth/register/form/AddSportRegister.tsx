@@ -30,7 +30,7 @@ export default function AddSportRegister({ setSportsData, setCurrentPage, setNex
     };
 
     const onSubmit = (data: any) => {
-        if (data.sport != undefined) {
+        if (sport != undefined) {
             sportsData.push({ "level": level, "name": sport })
         }
         console.log("onSubmit Submit Sportuser with sportsData", sportsData)
