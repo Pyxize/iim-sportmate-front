@@ -12,6 +12,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextLabel, TextError, formStyles } from "../../../assets/styles/form";
+import { AirbnbRating } from "react-native-ratings";
 
 type FormData = {
     activityName: string;
@@ -29,6 +30,21 @@ const Form = () => {
     const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
     const navigation = useNavigation();
 
+    axios.get(`https://sportmate-develop.herokuapp.com/api/sport`)
+        .then(res => {
+            console.log(res.data)
+            const sports = res.data;
+            console.log("Apres l'appel j'ai tous ces sports ", sports)
+            sports.forEach(sport => {
+                itemSport.push({ "label": sport, "value": sport })
+            });
+        })
+        .catch(error => {
+            console.log("ERREUR lors de la récupération de tous les sports: ", error);
+            return error;
+        });
+
+
     let config;
     let errorMessage;
 
@@ -44,7 +60,6 @@ const Form = () => {
         }
 
         console.log(data);
-        console.log('CONFIIIIG', config);
         axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
             .then(res => {
                 console.log(res);
@@ -68,11 +83,8 @@ const Form = () => {
         { label: 'Intermédiaire', value: 'Intermédiaire' },
         { label: 'Confirmé', value: 'Confirmé' }
     ]);
-    const [itemSport, setItemSport] = useState([
-        { label: 'Course', value: 'Course à pied' },
-        { label: 'Natation', value: 'Natation' },
-    ]);
-
+    const [itemSport, setItemSport] = useState([]);
+    const MEDAL_IMAGE = require('../../../assets/img/medal.png')
 
     return (
         <SafeAreaView>
@@ -106,40 +118,59 @@ const Form = () => {
                     name="description"
                 />
 
-                <TextLabel>Sport: </TextLabel>
-                {errors.sport && <TextError>{errors.sport.message}</TextError>}
-                <Controller
-                    control={control}
-                    rules={{
-                        required: "Le sport est obligatoire"
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <RNPickerSelect
-                            onValueChange={onChange}
-                            items={itemSport}
-                            style={{ ...pickerSelectStyles }}
+                <View>
+                    <TextLabel>Sport: </TextLabel>
+                    {errors.sport && <TextError>{errors.sport.message}</TextError>}
+                    <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                        <Controller
+                            control={control}
+                            rules={{
+                                required: 'Le sport est obligatoire'
+                            }}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <RNPickerSelect
+                                    onValueChange={(sport) => {
+                                        onChange(sport);
+                                    }}
+                                    items={itemSport}
+                                    style={{ ...pickerSelectStyles }}
+                                />
+                            )}
+                            name="sport"
                         />
-                    )}
-                    name="sport"
-                />
 
-
-                <TextLabel>Niveau: </TextLabel>
-                {errors.activityLevel && <TextError>{errors.activityLevel.message}</TextError>}
-                <Controller
-                    control={control}
-                    rules={{
-                        required: "Le niveau est obligatoire"
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <RNPickerSelect
-                            onValueChange={onChange}
-                            items={itemLevel}
-                            style={{ ...pickerSelectStyles }}
+                        <Controller
+                            control={control}
+                            rules={{
+                                required: 'Le niveau est obligatoire'
+                            }}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <AirbnbRating
+                                    starImage={MEDAL_IMAGE}
+                                    onFinishRating={(rating) => {
+                                        switch (rating) {
+                                            case 1:
+                                                onChange('Débutant')
+                                                break
+                                            case 2:
+                                                onChange('Intermédiaire')
+                                                break
+                                            case 3:
+                                                onChange('Confirmé')
+                                                break
+                                        }
+                                    }}
+                                    showRating={false}
+                                    count={3}
+                                    size={20}
+                                    selectedColor={Colors.primary}
+                                    defaultRating={0}
+                                />
+                            )}
+                            name="activityLevel"
                         />
-                    )}
-                    name="activityLevel"
-                />
+                    </View>
+                </View>
 
                 <TextLabel>Date: </TextLabel>
                 {errors.activityDate && <TextError>{errors.activityDate.message}</TextError>}
