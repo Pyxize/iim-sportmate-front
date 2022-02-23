@@ -8,7 +8,6 @@ import { Colors } from "../../../../../assets/styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UploadImage from "./UploadImage";
 import { TextError, TextLabel, formStyles } from "../../../../../assets/styles/form";
-import { format, parseISO } from "date-fns";
 
 type FormData = {
     profilePicture: string;
@@ -24,8 +23,6 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
     const { control, register, handleSubmit, setError, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
     const onSubmit = (data: any) => {
-        console.log("onSubmit UserRegister with data", data)
-        console.log("onSubmit date", date)
         if (validatePhone(data.mobilePhone)) {
             if (data.profilePicture == undefined) {
                 data.profilePicture = null;
@@ -63,8 +60,6 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
 
 
     const [date, setDate] = useState(new Date())
-    const [open, setOpen] = useState(false)
-
 
     return (
         <SafeAreaView>
@@ -145,8 +140,8 @@ const UserRegister = ({ setUserData, setCurrentPage, setNextTitle }) => {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <DatePicker
                                 style={formStyles.datePickerStyle}
-                                date={date} //initial date from state
-                                mode="date" //The enum of date, datetime and time
+                                date={date}
+                                mode="date"
                                 placeholder="select date"
                                 format="DD-MM-YYYY"
                                 maxDate={new Date()}
