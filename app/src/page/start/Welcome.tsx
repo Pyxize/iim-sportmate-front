@@ -1,6 +1,6 @@
 import * as React from 'react'
-import {Button, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
-import {Colors} from '../../../assets/styles/colors'
+import { StyleSheet, Text } from "react-native";
+import { Colors } from '../../../assets/styles/colors'
 import {
     Logo,
     PageTitle,
@@ -27,10 +27,10 @@ const Welcome = ({ navigation }) => {
 
                 <WrappedView>
                     <PrimaryButton onPress={() => navigation.navigate('Login')}>
-                            <Buttontext>Connexion</Buttontext>
+                        <Buttontext>Connexion</Buttontext>
                     </PrimaryButton>
                     <PrimaryButton onPress={() => navigation.navigate('Register')} style={styles.button}>
-                            <Buttontext on>S'inscrire</Buttontext>
+                        <Buttontext on>S'inscrire</Buttontext>
                     </PrimaryButton>
                 </WrappedView>
             </StyledContainer>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         color: Colors.white,
         textAlign: "center",
     },
-    button:{
+    button: {
         marginTop: 16,
     }
 })
