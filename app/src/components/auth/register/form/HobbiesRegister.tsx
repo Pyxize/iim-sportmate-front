@@ -43,7 +43,7 @@ export default function HobbiesRegister({ setHobbiesData, setCurrentPage, setNex
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <HobbiesButton dataParentToChild={livreImg} hobbies={hobbies} value='Livre'></HobbiesButton>
-                    <HobbiesButton dataParentToChild={cinemaImg} hobbies={hobbies} value='Cinema'></HobbiesButton>
+                    <HobbiesButton dataParentToChild={cinemaImg} hobbies={hobbies} value='Cinéma'></HobbiesButton>
                 </View>
             </View>
             <WrappedView style={{ marginLeft: 64, marginRight: 64 }}>
