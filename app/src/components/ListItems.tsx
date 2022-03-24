@@ -1,13 +1,12 @@
 import axios from 'axios';
 import React from "react";
-import {FlatList, StyleSheet, SwipeableListView, TouchableNativeFeedbackComponent, View} from "react-native";
+import {FlatList, StyleSheet, TouchableNativeFeedbackComponent, View} from "react-native";
 import { ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import authHeader from '../services/auth-header';
 import {Colors} from "../../assets/styles/colors";
-import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../assets/styles/styles";
 
 export default class ListItems extends React.Component {
     state = {

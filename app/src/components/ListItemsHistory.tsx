@@ -16,22 +16,24 @@ class ListItemsHistory extends React.Component {
         activities: [],
         errorMessage: "",
         token: "",
+        refresh: false,
     }
 
     async componentDidMount() {
+        console.log('didMount');
         this.callToSave()
 
     }
 
     async componentDidUpdate() {
-        const commejeveux = setTimeout(() => {
-            this.callToSave()
-        }, 3600000);
-        
-        return () => clearTimeout(commejeveux)
+        if (this.state.refresh) {
+            console.log('didUpdate');
+            this.callToSave();
+        }
     }
 
     async callToSave() {
+        console.log('call back to update');
         let config;
 
         const user = await AsyncStorage.getItem('@user');
@@ -60,7 +62,7 @@ class ListItemsHistory extends React.Component {
             }
             return error;
         });
-    }
+    };
 
     render() {
         const {
@@ -73,9 +75,6 @@ class ListItemsHistory extends React.Component {
         const today = new Date();
 
         const { navigation } = this.props;
-
-        // console.log('ICIIIIIIII', JSON.stringify(navigation.getParam('saved')));
-        
 
         return (
             <View style={styles.wrapped}>
@@ -103,6 +102,9 @@ class ListItemsHistory extends React.Component {
                                         <ListItem.Subtitle style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>Le {item.activityDate}</ListItem.Subtitle>
                                         <ListItem.Subtitle style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>A {item.address}</ListItem.Subtitle>
                                     </ListItem.Content>
+                                    <IconBtn style={isDateInPast(item.activityDate) ? styles.btnActivityPast : ''} onPress={() => {deleteActivity(item.id)}}>
+                                        <Ionicons name='remove-circle' size={40} color='#000'></Ionicons>
+                                    </IconBtn>
                                 </ListItem>
                             ))
                         }
@@ -136,6 +138,9 @@ const styles = StyleSheet.create({
         color: 'gray'
     },
     activityFutur: {
+    },
+    btnActivityPast: {
+        display: 'none'
     }
 });
 
@@ -143,6 +148,31 @@ function isDateInPast(date: { toString: () => string | number | Date; }) {
     const today = new Date();
     const dateInput = new Date(date.toString())
     return dateInput.getTime() < today.getTime();
+}
+
+async function deleteActivity(id_activity:number) {
+    let config;
+    try {
+        const user = await AsyncStorage.getItem('@user');
+        if (user) {
+            let token = user.split(",")[1].split(":")[1];
+            token = token.substring(1, token.length - 2);
+            config = {
+                headers: { Authorization: "Bearer " + token }
+            };
+        }
+
+        axios.delete(`https://sportmate-develop.herokuapp.com/api/activity/${id_activity}`, config)
+        .then(res => {
+            console.log('Supprimé');
+        })
+        .catch(error => {
+            console.log("ERREUR lors de l'appel au service pour la suppression d'event ", error);
+            return error;
+        })
+    } catch (error) {
+        console.log('Delete Error: ', error);
+    }
 }
 
 export default function() {
