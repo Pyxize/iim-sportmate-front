@@ -1,4 +1,20 @@
 {
-  "name": "sportmate",
-  "displayName": "sportmate"
+  "expo": {
+    "name": "sportmate",
+    "slug": "sportmate",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "tothepointcode.sportmate",
+      "adaptiveIcon": {
+        "backgroundColor": "#332424"
+      }
+    }
+  }
 }
