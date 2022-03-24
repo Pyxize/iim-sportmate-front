@@ -30,7 +30,7 @@ const Form = () => {
     const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
     const navigation = useNavigation();
 
-    axios.get(`https://sportmate-develop.herokuapp.com/api/sport`)
+    axios.get(`https://sportmate-develop.herokuapp.com/api/sports`)
         .then(res => {
             console.log(res.data)
             const sports = res.data;
