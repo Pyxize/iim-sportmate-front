@@ -6,6 +6,7 @@ import Login from "../page/auth/Login";
 import Register from "../page/auth/Register";
 import TabNavigation from './Tab-navigator';
 import ActivityAction from '../page/activity/ActivityAction';
+import ActivityDetails from '../page/activity/ActivityDetails';
 
 
 const Stack = createNativeStackNavigator();
@@ -27,6 +28,7 @@ export const RootNavigator = () => {
                 <Stack.Screen name="Login" component={Login}/>
                 <Stack.Screen name="Register" component={Register}/>
                 <Stack.Screen name='ActivityAction' component={ActivityAction}/>
+                <Stack.Screen name='ActivityDetails' component={ActivityDetails}/>
                 <Stack.Screen name="Home" component={TabNavigation}/>
             </Stack.Navigator>
         </NavigationContainer>

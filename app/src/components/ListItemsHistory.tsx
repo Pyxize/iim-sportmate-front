@@ -1,15 +1,15 @@
 import axios from 'axios';
-import React, {useEffect, useState} from "react";
-import {StyleSheet, View} from "react-native";
-import {ListItem, Text} from 'react-native-elements';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Button, ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {PrimaryButton, IconBtn, WrappedView} from '../../assets/styles/styles';
+import { PrimaryButton, IconBtn, WrappedView } from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from "@expo/vector-icons/Ionicons"
-import {Colors} from '../../assets/styles/colors'
-import {useNavigation} from "@react-navigation/native";
+import { Colors } from '../../assets/styles/colors'
+import { useNavigation } from "@react-navigation/native";
 
 
 const ListItemsHistory = () => {
@@ -23,11 +23,16 @@ const ListItemsHistory = () => {
     const today = new Date();
     const navigation = useNavigation();
 
+    let update = true;
 
     useEffect(() => {
-        //console.log('activities', activities)
-        //callToSave()
-    }, );
+        if (update) {
+            console.log('*******************APPEL CALL TO SAVE*******************')
+            console.log('activities', activities)
+            update = false;
+            callToSave()
+        }
+    }, [update]);
 
 
     const callToSave = async () => {
@@ -39,7 +44,7 @@ const ListItemsHistory = () => {
             let token = user.split(",")[1].split(":")[1];
             token = token.substring(1, token.length - 2);
             config = {
-                headers: {Authorization: "Bearer " + token}
+                headers: { Authorization: "Bearer " + token }
             };
         }
 
@@ -47,7 +52,6 @@ const ListItemsHistory = () => {
             .then(res => {
                 console.log(res.data)
                 const activities = res.data;
-                console.log('coucou', activities)
                 // this.setState({ activities: activities });
                 setActivities(activities);
             })
@@ -79,7 +83,7 @@ const ListItemsHistory = () => {
                 let token = user.split(",")[1].split(":")[1];
                 token = token.substring(1, token.length - 2);
                 config = {
-                    headers: {Authorization: "Bearer " + token}
+                    headers: { Authorization: "Bearer " + token }
                 };
             }
 
@@ -102,19 +106,31 @@ const ListItemsHistory = () => {
                 <View>
                     {
                         activities.map((item, i) => (
-                            <ListItem style={styles.listItemWrapper}
-                                      key={i}
-                                      bottomDivider
-                                      Component={TouchableScale}
-                                      friction={90}
-                                      tension={100}
-                                      activeScale={0.95}
-                                      linearGradientProps={{
-                                          colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
-                                          start: {x: 1, y: 1},
-                                          end: {x: 1, y: 1},
-                                      }}
-                                      ViewComponent={LinearGradient}
+                            <ListItem.Swipeable style={styles.listItemWrapper}
+                                rightContent={(reset) => (
+                                    <Button
+                                        title="Supprimer"
+                                        onPress={() => deleteActivity(item.id)}
+                                        icon={{ name: 'delete', color: 'white' }}
+                                        buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}
+                                    />
+                                )}
+                                key={i}
+                                bottomDivider
+                                Component={TouchableScale}
+                                friction={90}
+                                tension={100}
+                                activeScale={0.95}
+                                linearGradientProps={{
+                                    colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
+                                    start: { x: 1, y: 1 },
+                                    end: { x: 1, y: 1 },
+                                }}
+                                ViewComponent={LinearGradient}
+                                onPress={() => {
+                                    navigation.navigate('ActivityAction', { activity: item });
+                                }
+                                }
                             >
                                 <ListItem.Content>
                                     <ListItem.Title
@@ -127,16 +143,20 @@ const ListItemsHistory = () => {
                                         style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>A {item.address}</ListItem.Subtitle>
                                 </ListItem.Content>
                                 <IconBtn style={isDateInPast(item.activityDate) ? styles.btnActivityPast : ''}
-                                         onPress={() => {
-                                             deleteActivity(item.id)
-                                         }}>
+                                    onPress={() => {
+                                        deleteActivity(item.id);
+                                        update = true;
+                                    }}>
                                     <Ionicons name='remove-circle' size={40} color='#000'></Ionicons>
                                 </IconBtn>
-                            </ListItem>
+                            </ListItem.Swipeable>
                         ))
                     }
                     <WrappedView>
-                        <IconBtn onPress={() => navigation.navigate('ActivityAction')}>
+                        <IconBtn onPress={() => {
+                            navigation.navigate('ActivityAction', { activity: null });
+                            update = true;
+                        }}>
                             <Ionicons name='add-circle' size={40} color='#F67201'></Ionicons>
                         </IconBtn>
                     </WrappedView>
@@ -171,6 +191,4 @@ const styles = StyleSheet.create({
     btnActivityPast: {
         display: 'none'
     }
-
-
 })
