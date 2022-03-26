@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {SafeAreaView, ScrollView, StyleSheet} from "react-native";
+import {SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
 import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../../assets/styles/styles";
 // @ts-ignore
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,14 +20,10 @@ const Home = ({navigation}) => {
     return (
         <SafeAreaView>            
             <LinearGradient style={styles.lineargradient} colors={['#F0BB8E', '#9494B7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-                <ScrollView>
-                    <SafeAreaWrapped>
-                        <StyledContainer>
-                            <PageTitle textColor={Colors.black}>Près de chez moi</PageTitle>
-                            <ListItems/>
-                        </StyledContainer>
-                    </SafeAreaWrapped>
-                </ScrollView>
+                <View style={styles.wrap}>
+                    <Text>Prénom</Text>
+                    <ListItems/>
+                </View>
             </LinearGradient>
         </SafeAreaView>
         
@@ -38,5 +34,13 @@ export default Home;
 const styles = StyleSheet.create({
     lineargradient: {
         height: '100%'
+    },
+    wrap: {
+        height: '100%',
+        paddingBottom: 32,
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 16
     }
+
 });

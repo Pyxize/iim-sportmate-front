@@ -8,7 +8,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import authHeader from '../services/auth-header';
 import {Colors} from "../../assets/styles/colors";
 import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../assets/styles/styles";
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import absoluteFill = StyleSheet.absoluteFill;
 
+
+const styles = StyleSheet.create({
+    map: {
+        height: '100%',
+        width: '100%'
+    },
+});
+
+const Map = () => (
+        <MapView
+            //provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            style={styles.map}
+            mapPadding={{top: 200, right: 200, bottom: 200, left: 20}}
+            region={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+            }}
+        >
+        </MapView>
+);
+
+export default Map;
+
+/*
 export default class ListItems extends React.Component {
     state = {
         activities: [],
@@ -102,3 +130,4 @@ const styles = StyleSheet.create({
     }
 });
 
+*/
