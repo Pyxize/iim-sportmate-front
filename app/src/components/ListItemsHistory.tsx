@@ -22,8 +22,6 @@ const ListItemsHistory = ({ update }) => {
     const navigation = useNavigation();
 
     const [test, setTest] = useState(true)
-    console.log('*******************ListItemsHistory*******************', update)
-    console.log('*******************update value', update)
 
     useEffect(() => {
         console.log('activities', activities)
@@ -32,7 +30,6 @@ const ListItemsHistory = ({ update }) => {
 
 
     const callToSave = async () => {
-        console.log('*******************APPEL CALL TO SAVE*******************', test)
         let config;
 
         const user = await AsyncStorage.getItem('@user');
@@ -46,7 +43,6 @@ const ListItemsHistory = ({ update }) => {
 
         axios.get(`https://sportmate-develop.herokuapp.com/api/activity/user`, config)
             .then(res => {
-                // console.log(res.data)
                 const activities = res.data;
                 // this.setState({ activities: activities });
                 setActivities(activities);
