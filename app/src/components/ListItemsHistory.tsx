@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, ListItem, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -12,31 +12,32 @@ import { Colors } from '../../assets/styles/colors'
 import { useNavigation } from "@react-navigation/native";
 
 
-const ListItemsHistory = () => {
+const ListItemsHistory = ({ update }) => {
     const [activities, setActivities] = useState([])
     const [errorMessage, setErrorMessage] = useState("")
-    const [token, setToken] = useState("");
-    const [refresh, setRefresh] = useState(false);
 
-    const colorFuturActivity = ['#FFF', '#FFF'];
-    const colorPastActivity = ['#DCDCDC', '#DCDCDC'];
-    const today = new Date();
+    let callback = update;
+    const colorFuturActivity = '#FFF';
+    const colorPastActivity = '#DCDCDC';
     const navigation = useNavigation();
 
-    let update = true;
+    const [test, setTest] = useState(true)
+    console.log('*******************ListItemsHistory*******************', update)
+    console.log('*******************update value', update)
 
     useEffect(() => {
-        if (update) {
-            console.log('*******************APPEL CALL TO SAVE*******************')
+        console.log('Je rentre dans le useEffect', callback)
+        if (callback) {
             console.log('activities', activities)
-            update = false;
             callToSave()
+            callback = false
         }
-    }, [update]);
+        console.log('Je sors dans le useEffect', callback)
+    }, [callback]);
 
 
     const callToSave = async () => {
-        console.log('call back to update');
+        console.log('*******************APPEL CALL TO SAVE*******************', test)
         let config;
 
         const user = await AsyncStorage.getItem('@user');
@@ -50,10 +51,13 @@ const ListItemsHistory = () => {
 
         axios.get(`https://sportmate-develop.herokuapp.com/api/activity/user`, config)
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 const activities = res.data;
                 // this.setState({ activities: activities });
                 setActivities(activities);
+
+                update = false
+                console.log("Je refresh ma data")
             })
             .catch(error => {
                 console.log("ERREUR lors de l'appel à activity/user: ", error);
@@ -67,6 +71,8 @@ const ListItemsHistory = () => {
                 }
                 return error;
             });
+        setTest(false)
+        console.log("Après l'appel à calltoUpdate j'ai ", test)
     };
 
     const isDateInPast = (date: { toString: () => string | number | Date; }) => {
@@ -89,10 +95,11 @@ const ListItemsHistory = () => {
 
             axios.delete(`https://sportmate-develop.herokuapp.com/api/activity/${id_activity}`, config)
                 .then(res => {
-                    console.log('Supprimé');
+                    console.log(`Activité ${id_activity} bien supprimée`);
+                    callToSave()
                 })
                 .catch(error => {
-                    console.log("ERREUR lors de l'appel au service pour la suppression d'event ", error);
+                    console.log(`ERREUR lors de la suppression de l'activité ${id_activity}`, error);
                     return error;
                 })
         } catch (error) {
@@ -101,36 +108,52 @@ const ListItemsHistory = () => {
     }
 
     return (
-        <View style={styles.wrapped}>
+        <View>
             {errorMessage === "" ?
                 <View>
                     {
                         activities.map((item, i) => (
-                            <ListItem.Swipeable style={styles.listItemWrapper}
-                                rightContent={(reset) => (
+                            <ListItem.Swipeable
+                                containerStyle={{ backgroundColor: (isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity) }}
+                                bottomDivider={true}
+                                rightContent={
                                     <Button
-                                        title="Supprimer"
-                                        onPress={() => deleteActivity(item.id)}
+                                        title="Delete"
+                                        onPressIn={() => deleteActivity(item.id)}
                                         icon={{ name: 'delete', color: 'white' }}
                                         buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}
                                     />
-                                )}
+                                }
+                                leftContent={
+                                    <Button
+                                        title="Info"
+                                        onPressIn={() => {
+                                            if (!isDateInPast(item.activityDate)) {
+                                                navigation.navigate('ActivityAction', { activity: item });
+                                            }
+                                        }}
+                                        icon={{ name: 'info', color: 'white' }}
+                                        buttonStyle={{ minHeight: '100%' }}
+                                    />
+                                }
                                 key={i}
-                                bottomDivider
-                                Component={TouchableScale}
                                 friction={90}
-                                tension={100}
                                 activeScale={0.95}
-                                linearGradientProps={{
-                                    colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
-                                    start: { x: 1, y: 1 },
-                                    end: { x: 1, y: 1 },
-                                }}
-                                ViewComponent={LinearGradient}
+                                // linearGradientProps={{
+                                //     colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
+                                //     start: { x: 1, y: 1 },
+                                //     end: { x: 1, y: 1 },
+                                // }}
+                                // ViewComponent={LinearGradient}
                                 onPress={() => {
-                                    navigation.navigate('ActivityAction', { activity: item });
-                                }
-                                }
+                                    if (!isDateInPast(item.activityDate)) {
+                                        console.log(" BEFORE SET Update to do ??????? ", test)
+                                        console.log(" AFTer SET Update to do ??????? ", test)
+                                        navigation.navigate('ActivityAction', { activity: item });
+                                        setTest(true);
+                                        console.log(" AFTer navigate Update to do ??????? ", test)
+                                    }
+                                }}
                             >
                                 <ListItem.Content>
                                     <ListItem.Title
@@ -142,20 +165,13 @@ const ListItemsHistory = () => {
                                     <ListItem.Subtitle
                                         style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>A {item.address}</ListItem.Subtitle>
                                 </ListItem.Content>
-                                <IconBtn style={isDateInPast(item.activityDate) ? styles.btnActivityPast : ''}
-                                    onPress={() => {
-                                        deleteActivity(item.id);
-                                        update = true;
-                                    }}>
-                                    <Ionicons name='remove-circle' size={40} color='#000'></Ionicons>
-                                </IconBtn>
+                                <ListItem.Chevron />
                             </ListItem.Swipeable>
                         ))
                     }
                     <WrappedView>
                         <IconBtn onPress={() => {
                             navigation.navigate('ActivityAction', { activity: null });
-                            update = true;
                         }}>
                             <Ionicons name='add-circle' size={40} color='#F67201'></Ionicons>
                         </IconBtn>

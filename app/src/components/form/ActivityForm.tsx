@@ -1,14 +1,12 @@
 import { Controller, useForm } from "react-hook-form"
-import { Text, View, TextInput, Button, Alert, StyleSheet, Pressable } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../../../assets/styles/colors'
-import { Buttontext, PrimaryButton, StyledContainer, WrappedView, PageTitle } from "../../../assets/styles/styles";
-import React, { useState, useRef, useEffect } from 'react';
+import { Buttontext, PrimaryButton, WrappedView, PageTitle } from "../../../assets/styles/styles";
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-native-datepicker';
 import RNPickerSelect from "react-native-picker-select";
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import axios from 'axios';
-import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextLabel, TextError, formStyles } from "../../../assets/styles/form";
@@ -49,12 +47,10 @@ const Form = ({ activity }) => {
 
         if (activity) {
             console.log('MISE A JOUR', activity.id);
-            console.log('TOOOOOOOOOOOOOKEN', config);
             axios.put(`https://sportmate-develop.herokuapp.com/api/activity/${activity.id}`, data, config)
                 .then(res => {
-                    console.log(res);
                     console.log(res.data);
-                    navigation.navigate('Évènement', { saved: 'saved' })
+                    navigation.navigate('Évènement', { saved: 'saved', update: true })
                 })
                 .catch(error => {
                     console.log("ERREUR lors de l'update de activité: ", error);
@@ -70,9 +66,8 @@ const Form = ({ activity }) => {
             console.log('CREATION OUI');
             axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
                 .then(res => {
-                    console.log(res);
                     console.log(res.data);
-                    navigation.navigate('Évènement', { saved: 'saved' })
+                    navigation.navigate('Évènement', { saved: 'saved', update: true })
                 })
                 .catch(error => {
                     console.log("ERREUR lors de la création de l'activité: ", error);
@@ -147,7 +142,9 @@ const Form = ({ activity }) => {
             setValue('activityLevel', activity.activityLevel, { shouldValidate: true })
             setValue('activityDate', activity.activityDate, { shouldValidate: true })
             setValue('address', activity.address, { shouldValidate: true })
-            setValue('participant', activity.participant.toString(), { shouldValidate: true })
+            if(activity.participant != null){
+                setValue('participant', activity.participant.toString(), { shouldValidate: true })
+            }
             setValue('contact', activity.contact, { shouldValidate: true })
             setValue('isEvent', activity.isEvent, { shouldValidate: true })
             // setItemSport(activity.sport)

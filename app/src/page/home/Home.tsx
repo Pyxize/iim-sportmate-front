@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {SafeAreaView, ScrollView, StyleSheet} from "react-native";
+import {SafeAreaView, ScrollView, StyleSheet, } from "react-native";
 import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../../assets/styles/styles";
 // @ts-ignore
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,16 +19,14 @@ const Home = ({navigation}) => {
     // @ts-ignore
     return (
         <SafeAreaView>            
-            <LinearGradient style={styles.lineargradient} colors={['#F0BB8E', '#9494B7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            {/* <LinearGradient style={styles.lineargradient} colors={['#F0BB8E', '#9494B7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}> */}
                 <ScrollView>
                     <SafeAreaWrapped>
-                        <StyledContainer>
-                            <PageTitle textColor={Colors.black}>Près de chez moi</PageTitle>
+                            {/* <PageTitle textColor={Colors.black}>Près de chez moi</PageTitle> */}
                             <ListItems/>
-                        </StyledContainer>
                     </SafeAreaWrapped>
                 </ScrollView>
-            </LinearGradient>
+            {/* </LinearGradient> */}
         </SafeAreaView>
         
     )

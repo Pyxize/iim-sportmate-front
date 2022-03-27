@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {SafeAreaWrapped, StyledContainer} from "../../../assets/styles/styles";
+import {StyledContainer} from "../../../assets/styles/styles";
 import {ImageBackground, StyleSheet, ScrollView} from "react-native";
 import Bg from '../../../assets/img/SportMate_bg_connexion.png';
 import ActivityForm from '../../components/form/ActivityForm'
