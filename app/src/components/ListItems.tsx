@@ -1,13 +1,10 @@
 import axios from 'axios';
 import React from "react";
-import {FlatList, StyleSheet, SwipeableListView, TouchableNativeFeedbackComponent, View} from "react-native";
-import { ListItem, Text } from 'react-native-elements';
-import LinearGradient from 'react-native-linear-gradient';
-import TouchableScale from 'react-native-touchable-scale';
+import { StyleSheet, View } from "react-native";
+import { ListItem, Text, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import authHeader from '../services/auth-header';
-import {Colors} from "../../assets/styles/colors";
-import {PageTitle, SafeAreaWrapped, StyledContainer} from "../../assets/styles/styles";
+import TouchableScale from 'react-native-touchable-scale';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class ListItems extends React.Component {
     state = {
@@ -56,17 +53,40 @@ export default class ListItems extends React.Component {
         } = this.state;
 
         return (
-            <View style={styles.wrapped}>
+            <View>
                 {errorMessage === "" ?
                     <View>
                         {
                             activities.map((item, i) => (
-                                <ListItem style={styles.listItemWrapper}
+                                <ListItem.Swipeable 
+                                    bottomDivider={true}
+                                    // containerStyle={{ backgroundColor:'red'}}
                                     key={i}
                                     Component={TouchableScale}
                                     friction={90}
-                                    tension={100}
                                     activeScale={0.95}
+                                    // linearGradientProps={{
+                                    //     colors: ['#F0BB8E', '#9494B7'],
+                                    //     start: { x: 0, y: 0 },
+                                    //     end: { x: 1, y: 0 },
+                                    // }}
+                                    // ViewComponent={LinearGradient}
+                                    rightContent={
+                                        <Button
+                                            title="Delete"
+                                            onPress={() => console.log("Je veux delete")}
+                                            icon={{ name: 'delete', color: 'white' }}
+                                            buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}
+                                        />
+                                    }
+                                    leftContent={
+                                        <Button
+                                            title="Info"
+                                            onPress={() => console.log("Je veux infos")}
+                                            icon={{ name: 'info', color: 'white' }}
+                                            buttonStyle={{ minHeight: '100%' }}
+                                        />
+                                    }
                                 >
                                     <ListItem.Content>
                                         <ListItem.Title>{item.activityName}</ListItem.Title>
@@ -74,7 +94,8 @@ export default class ListItems extends React.Component {
                                         <ListItem.Subtitle>Le {item.activityDate}</ListItem.Subtitle>
                                         <ListItem.Subtitle>A {item.address}</ListItem.Subtitle>
                                     </ListItem.Content>
-                                </ListItem>
+                                    <ListItem.Chevron />
+                                </ListItem.Swipeable>
                             ))
                         }
                     </View>
@@ -84,21 +105,17 @@ export default class ListItems extends React.Component {
                     </View>
                 }
             </View>
-            )
+        )
 
     };
 }
 const styles = StyleSheet.create({
     wrapped: {
-      marginBottom: 50
+        marginBottom: 50
     },
     container: {
         marginTop: 50,
-        marginLeft: 10,
         fontSize: 20
-    },
-    listItemWrapper: {
-        marginBottom: 16
     }
 });
 

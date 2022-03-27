@@ -15,7 +15,7 @@ type FormData = {
 const SportRegisterComponent = ({ setLevel, setSport }) => {
     const { control, register, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
 
-    axios.get(`https://sportmate-develop.herokuapp.com/api/sport`)
+    axios.get(`https://sportmate-develop.herokuapp.com/api/sports`)
         .then(res => {
             console.log(res.data)
             const sports = res.data;

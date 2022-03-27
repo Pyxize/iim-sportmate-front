@@ -1,18 +1,17 @@
 import { Controller, useForm } from "react-hook-form"
-import { Text, View, TextInput, Button, Alert, StyleSheet, Pressable } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../../../assets/styles/colors'
-import { Buttontext, PrimaryButton, StyledContainer, WrappedView, PageTitle } from "../../../assets/styles/styles";
-import React, { useState, useRef } from 'react';
+import { Buttontext, PrimaryButton, WrappedView, PageTitle } from "../../../assets/styles/styles";
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-native-datepicker';
 import RNPickerSelect from "react-native-picker-select";
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import axios from 'axios';
-import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextLabel, TextError, formStyles } from "../../../assets/styles/form";
 import { AirbnbRating } from "react-native-ratings";
+import { makeid } from "../../../assets/random";
 
 type FormData = {
     activityName: string;
@@ -26,24 +25,10 @@ type FormData = {
     isEvent: boolean;
 }
 
-const Form = () => {
-    const { control, handleSubmit, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
+const Form = ({ activity }) => {
+
+    const { control, handleSubmit, setValue, formState: { errors, isSubmitSuccessful } } = useForm<FormData>();
     const navigation = useNavigation();
-
-    axios.get(`https://sportmate-develop.herokuapp.com/api/sport`)
-        .then(res => {
-            console.log(res.data)
-            const sports = res.data;
-            console.log("Apres l'appel j'ai tous ces sports ", sports)
-            sports.forEach(sport => {
-                itemSport.push({ "label": sport, "value": sport })
-            });
-        })
-        .catch(error => {
-            console.log("ERREUR lors de la récupération de tous les sports: ", error);
-            return error;
-        });
-
 
     let config;
     let errorMessage;
@@ -60,24 +45,48 @@ const Form = () => {
         }
 
         console.log(data);
-        axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-                navigation.navigate('Évènement', { saved: 'saved' })
-            })
-            .catch(error => {
-                console.log("ERREUR lors de l'appel à activity/user: ", error);
-                error = error.toString();
-                if (error.includes('403')) {
-                    errorMessage = "Oups vous n'êtes pas autorisé";
-                } else {
-                    errorMessage = error;
-                }
-                return errorMessage;
-            });
+
+        if (activity) {
+            console.log('MISE A JOUR', activity.id);
+            axios.put(`https://sportmate-develop.herokuapp.com/api/activity/${activity.id}`, data, config)
+                .then(res => {
+                    console.log(res.data);
+                    navigation.navigate('Évènement', { saved: 'saved', update: makeid() })
+                })
+                .catch(error => {
+                    console.log("ERREUR lors de l'update de activité: ", error);
+                    error = error.toString();
+                    if (error.includes('403')) {
+                        errorMessage = "Oups vous n'êtes pas autorisé";
+                    } else {
+                        errorMessage = error;
+                    }
+                    return errorMessage;
+                });
+        } else {
+            console.log('CREATION OUI');
+            axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
+                .then(res => {
+                    console.log(res.data);
+                    navigation.navigate('Évènement', { saved: 'saved', update: makeid() })
+                })
+                .catch(error => {
+                    console.log("ERREUR lors de la création de l'activité: ", error);
+                    error = error.toString();
+                    if (error.includes('403')) {
+                        errorMessage = "Oups vous n'êtes pas autorisé";
+                    } else {
+                        errorMessage = error;
+                    }
+                    return errorMessage;
+                });
+        }
     }
-    const [date, setDate] = useState(new Date());
+
+    const foundDefaultDate = (activity) => {
+        return activity != null ? activity.activityDate : new Date();
+    }
+    const [date, setDate] = useState(foundDefaultDate(activity));
     const [itemLevel, setItemLevel] = useState([
         { label: 'Débutant', value: 'Débutant' },
         { label: 'Intermédiaire', value: 'Intermédiaire' },
@@ -86,9 +95,66 @@ const Form = () => {
     const [itemSport, setItemSport] = useState([]);
     const MEDAL_IMAGE = require('../../../assets/img/medal.png')
 
+    const foundDefaultRating = (activity) => {
+        if (activity != null) {
+            switch (activity.activityLevel) {
+                case 'Débutant':
+                    return 1
+                case 'Intermédiaire':
+                    return 2
+                case 'Confirmé':
+                    return 3
+            }
+        }
+        return 0;
+
+    }
+
+    const foundDefaultSport = (activity) => {
+        if (activity != null) {
+            return "Natation";
+        }
+        return "Course à pied";
+
+    }
+    let defaultRating = foundDefaultRating(activity);
+
+    let defaultSport = foundDefaultSport(activity);
+    useEffect(() => {
+        axios.get(`https://sportmate-develop.herokuapp.com/api/sports`)
+            .then(res => {
+                console.log(res.data)
+                const sports = res.data;
+                console.log("Apreè l'appel j'ai tous ces sports ", sports)
+                sports.forEach(sport => {
+                    itemSport.push({ "label": sport, "value": sport })
+                });
+            })
+            .catch(error => {
+                console.log("ERREUR lors de la récupération de tous les sports: ", error);
+                return error;
+            });
+
+        if (activity != null) {
+            console.log('Je met à jour les datas pour le formulaire car en mode update :', activity);
+            setValue('activityName', activity.activityName, { shouldValidate: true })
+            setValue('description', activity.description, { shouldValidate: true })
+            setValue('sport', activity.sport, { shouldValidate: true })
+            setValue('activityLevel', activity.activityLevel, { shouldValidate: true })
+            setValue('activityDate', activity.activityDate, { shouldValidate: true })
+            setValue('address', activity.address, { shouldValidate: true })
+            if(activity.participant != null){
+                setValue('participant', activity.participant.toString(), { shouldValidate: true })
+            }
+            setValue('contact', activity.contact, { shouldValidate: true })
+            setValue('isEvent', activity.isEvent, { shouldValidate: true })
+            // setItemSport(activity.sport)
+        }
+    }, [activity]);
+
     return (
         <SafeAreaView>
-            <PageTitle>Création d'évènement</PageTitle>
+            <PageTitle>{activity ? 'Modification' : 'Création'} d'évènement</PageTitle>
             <View>
                 <TextLabel>Nom de l'évènement: </TextLabel>
                 <Controller
@@ -134,9 +200,11 @@ const Form = () => {
                                     }}
                                     items={itemSport}
                                     style={{ ...pickerSelectStyles }}
-                                />
+                                    // value={"Vélo"}
+                                    // placeholder = {"Vélo"}
+                               />
                             )}
-                            name="sport"
+                             name="sport"
                         />
 
                         <Controller
@@ -164,7 +232,7 @@ const Form = () => {
                                     count={3}
                                     size={20}
                                     selectedColor={Colors.primary}
-                                    defaultRating={0}
+                                    defaultRating={defaultRating}
                                 />
                             )}
                             name="activityLevel"
@@ -258,7 +326,8 @@ const Form = () => {
                     control={control}
                     rules={{
                         maxLength: 10,
-                        minLength: 10
+                        minLength: 10,
+                        required: 'Le numéro de téléphone est obligatoire.'
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput

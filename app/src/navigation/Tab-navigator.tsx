@@ -3,6 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Homepage from '../page/home/Home';
 import ActivityPage from '../page/activity/ActivityHistory';
+import { makeid } from '../../assets/random';
 
 const Tab = createBottomTabNavigator()
 
@@ -29,7 +30,7 @@ const TabNavigation = () => {
         })}
       >
         <Tab.Screen name="Accueil" component={Homepage} />
-        <Tab.Screen name="Évènement" component={ActivityPage} />
+        <Tab.Screen name="Évènement" component={ActivityPage} initialParams={{ update: makeid() }} />
       </Tab.Navigator>
     )
 }
