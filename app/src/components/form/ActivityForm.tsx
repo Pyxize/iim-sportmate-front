@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextLabel, TextError, formStyles } from "../../../assets/styles/form";
 import { AirbnbRating } from "react-native-ratings";
+import { makeid } from "../../../assets/random";
 
 type FormData = {
     activityName: string;
@@ -50,7 +51,7 @@ const Form = ({ activity }) => {
             axios.put(`https://sportmate-develop.herokuapp.com/api/activity/${activity.id}`, data, config)
                 .then(res => {
                     console.log(res.data);
-                    navigation.navigate('Évènement', { saved: 'saved', update: true })
+                    navigation.navigate('Évènement', { saved: 'saved', update: makeid() })
                 })
                 .catch(error => {
                     console.log("ERREUR lors de l'update de activité: ", error);
@@ -67,7 +68,7 @@ const Form = ({ activity }) => {
             axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
                 .then(res => {
                     console.log(res.data);
-                    navigation.navigate('Évènement', { saved: 'saved', update: true })
+                    navigation.navigate('Évènement', { saved: 'saved', update: makeid() })
                 })
                 .catch(error => {
                     console.log("ERREUR lors de la création de l'activité: ", error);

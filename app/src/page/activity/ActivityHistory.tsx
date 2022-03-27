@@ -25,7 +25,7 @@ const ActivityHistory = ({route, navigation }) => {
             <ScrollView>
                 <SafeAreaWrapped>
                     {/* <PageTitle textColor={Colors.black}> Mes évènements</PageTitle> */}
-                    <ListItemsHistory update={true}/>
+                    <ListItemsHistory update={route.params.update}/>
                 </SafeAreaWrapped>
             </ScrollView>
         </SafeAreaView>

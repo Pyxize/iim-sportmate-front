@@ -16,7 +16,7 @@ const ListItemsHistory = ({ update }) => {
     const [activities, setActivities] = useState([])
     const [errorMessage, setErrorMessage] = useState("")
 
-    let callback = update;
+    // let callback = update;
     const colorFuturActivity = '#FFF';
     const colorPastActivity = '#DCDCDC';
     const navigation = useNavigation();
@@ -26,14 +26,9 @@ const ListItemsHistory = ({ update }) => {
     console.log('*******************update value', update)
 
     useEffect(() => {
-        console.log('Je rentre dans le useEffect', callback)
-        if (callback) {
-            console.log('activities', activities)
-            callToSave()
-            callback = false
-        }
-        console.log('Je sors dans le useEffect', callback)
-    }, [callback]);
+        console.log('activities', activities)
+        callToSave()
+    }, [update]);
 
 
     const callToSave = async () => {
