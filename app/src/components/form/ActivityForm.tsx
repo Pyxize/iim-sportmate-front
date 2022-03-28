@@ -213,14 +213,9 @@ const Form = ({ activity }) => {
                                     location = { "latitude": details?.geometry.location.lat, "longitude": details?.geometry.location.lng }
                                 }}
                                 enablePoweredByContainer={false}
-                                // ref={ref => {
-                                //     ref?.setAddressText(value)
-                                // }}
                                 textInputProps={{
-                                    // defaultInputValue: value,
-                                    // value: value,
-                                    // isClearable: true,
-                                    // onChange: onChange(data);
+                                    value: value,
+                                    onChangeText: (text) => { onChange(text); },
                                     placeholderTextColor: '#B7B9BA'
                                 }}
                                 styles={{
