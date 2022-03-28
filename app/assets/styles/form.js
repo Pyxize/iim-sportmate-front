@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import {Colors} from './colors'
 import {StyleSheet } from "react-native";
+import { color } from 'react-native-elements/dist/helpers';
 
 export const TextLabel = styled.Text`
     margin-left: 16px;
@@ -22,6 +23,11 @@ export const formStyles = StyleSheet.create({
         borderColor: Colors.primary,
         borderRadius: 8,
         padding: 10,
+        color: Colors.white
+    },
+    label: {
+        marginLeft: 16,
+        marginTop: 16,
         color: Colors.white
     },
     wrappedView: {
