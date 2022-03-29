@@ -55,8 +55,13 @@ const Form = ({ activity }) => {
 
         if (activity) {
             console.log('MISE A JOUR', activity.id);
-            data.latitude = location.latitude;
-            data.longitude = location.longitude;
+            if(undefined == location){
+                data.latitude = activity.latitude;
+                data.longitude = activity.longitude;
+            } else {
+                data.latitude = location.latitude;
+                data.longitude = location.longitude;
+            }
             axios.put(`https://sportmate-develop.herokuapp.com/api/activity/${activity.id}`, data, config)
                 .then(res => {
                     console.log(res.data);
@@ -170,7 +175,6 @@ const Form = ({ activity }) => {
             }
             setValue('contact', activity.contact, { shouldValidate: true })
             setValue('isEvent', activity.isEvent, { shouldValidate: true })
-            // setItemSport(activity.sport)
         }
 
     }, [activity]);
@@ -215,7 +219,9 @@ const Form = ({ activity }) => {
                                 enablePoweredByContainer={false}
                                 textInputProps={{
                                     value: value,
-                                    onChangeText: (text) => { onChange(text); },
+                                    onChangeText: (text) => {
+                                        onChange(text);
+                                    },
                                     placeholderTextColor: '#B7B9BA'
                                 }}
                                 styles={{
@@ -274,7 +280,7 @@ const Form = ({ activity }) => {
                 />
 
                 <View>
-                    <TextLabel>Sport: </TextLabel>
+                    <TextLabel>Sport:</TextLabel>
                     {errors.sport && <TextError>{errors.sport.message}</TextError>}
                     <View style={{ flexDirection: 'row' }}>
                         <Controller
@@ -284,13 +290,13 @@ const Form = ({ activity }) => {
                             }}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <RNPickerSelect
+                                    value={activity.sport}
+                                    itemKey={activity.sport}
                                     onValueChange={(sport) => {
                                         onChange(sport);
                                     }}
                                     items={itemSport}
                                     style={{ ...pickerSelectStyles }}
-                                // value={"Vélo"}
-                                // placeholder = {"Vélo"}
                                 />
                             )}
                             name="sport"
