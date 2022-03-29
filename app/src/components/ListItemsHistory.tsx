@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useDebugValue, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, ListItem, Text } from 'react-native-elements';
+import { Button, ListItem } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchableScale from 'react-native-touchable-scale';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,10 +9,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { Colors } from '../../assets/styles/colors'
 import { useNavigation } from "@react-navigation/native";
+import {
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    TouchableHighlight,
+    View,
+} from 'react-native';
 
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const ListItemsHistory = ({ update }) => {
     const [activities, setActivities] = useState([])
+
     const [errorMessage, setErrorMessage] = useState("")
 
     // let callback = update;
@@ -44,7 +52,6 @@ const ListItemsHistory = ({ update }) => {
         axios.get(`https://sportmate-develop.herokuapp.com/api/activity/user`, config)
             .then(res => {
                 const activities = res.data;
-                // this.setState({ activities: activities });
                 setActivities(activities);
 
                 update = false
@@ -72,7 +79,11 @@ const ListItemsHistory = ({ update }) => {
         return dateInput.getTime() < today.getTime();
     }
 
-    const deleteActivity = async (id_activity: number) => {
+    const deleteActivity = async (id_activity: number, rowMap, rowKey) => {
+        closeRow(rowMap, rowKey);
+        const newData = [...activities];
+        const prevIndex = activities.findIndex(item => item.id === rowKey);
+        newData.splice(prevIndex, 1);
         let config;
         try {
             const user = await AsyncStorage.getItem('@user');
@@ -98,68 +109,77 @@ const ListItemsHistory = ({ update }) => {
         }
     }
 
+    const closeRow = (rowMap, rowKey) => {
+        if (rowMap[rowKey]) {
+            rowMap[rowKey].closeRow();
+        }
+    };
+
+    // const deleteRow = (rowMap, rowKey) => {
+    //     closeRow(rowMap, rowKey);
+    //     const newData = [...activities];
+    //     const prevIndex = activities.findIndex(item => item.key === rowKey);
+    //     newData.splice(prevIndex, 1);
+    //     setActivities(newData);
+    // };
+
+    const onRowDidOpen = rowKey => {
+        console.log('This row opened', rowKey);
+    };
+
+    const renderItem = data => (
+        <TouchableHighlight
+            onPress={() => console.log('You touched me')}
+            style={styles.rowFront}
+            underlayColor={'#AAA'}
+        >
+            <View>
+                <View>
+                    <Text style={isDateInPast(data.item.activityDate) ? styles.activityPast : styles.activityFutur}>{data.item.activityName}</Text>
+                    <Text style={isDateInPast(data.item.activityDate) ? styles.activityPast : styles.activityFutur}>{data.item.sport} niveau {data.item.activityLevel}</Text>
+                    <Text style={isDateInPast(data.item.activityDate) ? styles.activityPast : styles.activityFutur}> Le {data.item.activityDate}</Text>
+                    <Text style={isDateInPast(data.item.activityDate) ? styles.activityPast : styles.activityFutur}> A {data.item.address}</Text>
+                </View >
+            </View>
+        </TouchableHighlight>
+    );
+
+    const renderHiddenItem = (data, rowMap) => (
+        <View style={styles.rowBack}>
+            <Text>Left</Text>
+            <TouchableOpacity
+                style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                onPress={() => closeRow(rowMap, data.item.id)}
+            >
+                <Text style={styles.backTextWhite}>Close</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.backRightBtn, styles.backRightBtnRight]}
+                onPress={() => deleteActivity(data.item.id, rowMap, data.item.id)}
+            >
+                <Text style={styles.backTextWhite}>Delete</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
     return (
         <View>
             {errorMessage === "" ?
                 <View>
-                    {
-                        activities.map((item, i) => (
-                            <ListItem.Swipeable
-                                containerStyle={{ backgroundColor: (isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity) }}
-                                bottomDivider={true}
-                                rightContent={
-                                    <Button
-                                        title="Delete"
-                                        onPressIn={() => deleteActivity(item.id)}
-                                        icon={{ name: 'delete', color: 'white' }}
-                                        buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}
-                                    />
-                                }
-                                leftContent={
-                                    <Button
-                                        title="Info"
-                                        onPressIn={() => {
-                                            if (!isDateInPast(item.activityDate)) {
-                                                navigation.navigate('ActivityAction', { activity: item });
-                                            }
-                                        }}
-                                        icon={{ name: 'info', color: 'white' }}
-                                        buttonStyle={{ minHeight: '100%' }}
-                                    />
-                                }
-                                key={i}
-                                friction={90}
-                                activeScale={0.95}
-                                // linearGradientProps={{
-                                //     colors: isDateInPast(item.activityDate) ? colorPastActivity : colorFuturActivity,
-                                //     start: { x: 1, y: 1 },
-                                //     end: { x: 1, y: 1 },
-                                // }}
-                                // ViewComponent={LinearGradient}
-                                onPress={() => {
-                                    if (!isDateInPast(item.activityDate)) {
-                                        console.log(" BEFORE SET Update to do ??????? ", test)
-                                        console.log(" AFTer SET Update to do ??????? ", test)
-                                        navigation.navigate('ActivityAction', { activity: item });
-                                        setTest(true);
-                                        console.log(" AFTer navigate Update to do ??????? ", test)
-                                    }
-                                }}
-                            >
-                                <ListItem.Content>
-                                    <ListItem.Title
-                                        style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>{item.activityName}</ListItem.Title>
-                                    <ListItem.Subtitle
-                                        style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>{item.sport} niveau {item.activityLevel}</ListItem.Subtitle>
-                                    <ListItem.Subtitle
-                                        style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>Le {item.activityDate}</ListItem.Subtitle>
-                                    <ListItem.Subtitle
-                                        style={isDateInPast(item.activityDate) ? styles.activityPast : styles.activityFutur}>A {item.address}</ListItem.Subtitle>
-                                </ListItem.Content>
-                                <ListItem.Chevron />
-                            </ListItem.Swipeable>
-                        ))
-                    }
+                    <View style={styles.container}>
+                        <SwipeListView
+                            keyExtractor={(rowData, index) => {
+                                return rowData.id.toString();
+                            }}
+                            data={activities}
+                            renderItem={renderItem}
+                            renderHiddenItem={renderHiddenItem}
+                            leftOpenValue={75}
+                            rightOpenValue={-150}
+                            onRowDidOpen={onRowDidOpen}
+                        />
+                    </View>
+
                     <WrappedView>
                         <IconBtn onPress={() => {
                             navigation.navigate('ActivityAction', { activity: null });
@@ -167,34 +187,75 @@ const ListItemsHistory = ({ update }) => {
                             <Ionicons name='add-circle' size={40} color='#F67201'></Ionicons>
                         </IconBtn>
                     </WrappedView>
-                </View>
+                </View >
                 :
                 <View>
                     <Text style={styles.container}> {errorMessage}</Text>
                 </View>
             }
-        </View>
+        </View >
     )
 
 }
 export default ListItemsHistory;
 
+
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        flex: 1,
+    },
+    backTextWhite: {
+        color: '#FFF',
+    },
+    rowFront: {
+        alignItems: 'center',
+        backgroundColor: '#CCC',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        justifyContent: 'center',
+        height: 100,
+    },
+    rowBack: {
+        alignItems: 'center',
+        backgroundColor: '#DDD',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    backRightBtn: {
+        alignItems: 'center',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 75,
+    },
+    backRightBtnLeft: {
+        backgroundColor: 'blue',
+        right: 75,
+    },
+    backRightBtnRight: {
+        backgroundColor: 'red',
+        right: 0,
+    },
     wrapped: {
         marginBottom: 50,
     },
-    container: {
-        marginTop: 50,
-        marginLeft: 10,
-        fontSize: 20
-    },
+    // container: {
+    //     marginTop: 50,
+    //     marginLeft: 10,
+    //     fontSize: 20
+    // },
     listItemWrapper: {
         marginBottom: 16,
     },
     activityPast: {
         color: 'gray'
     },
-    activityFutur: {},
+    activityFutur: {
+    },
     btnActivityPast: {
         display: 'none'
     }
