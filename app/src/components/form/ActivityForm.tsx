@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form"
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, ScrollView } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../../../assets/styles/colors'
 import { Buttontext, PrimaryButton, WrappedView, PageTitle } from "../../../assets/styles/styles";
@@ -12,6 +12,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TextLabel, TextError, formStyles } from "../../../assets/styles/form";
 import { AirbnbRating } from "react-native-ratings";
 import { makeid } from "../../../assets/random";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Text } from "react-native-elements";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
 type FormData = {
     activityName: string;
@@ -23,6 +28,8 @@ type FormData = {
     participant: string;
     contact: string;
     isEvent: boolean;
+    longitude: string;
+    latitude: string;
 }
 
 const Form = ({ activity }) => {
@@ -48,6 +55,13 @@ const Form = ({ activity }) => {
 
         if (activity) {
             console.log('MISE A JOUR', activity.id);
+            if(undefined == location){
+                data.latitude = activity.latitude;
+                data.longitude = activity.longitude;
+            } else {
+                data.latitude = location.latitude;
+                data.longitude = location.longitude;
+            }
             axios.put(`https://sportmate-develop.herokuapp.com/api/activity/${activity.id}`, data, config)
                 .then(res => {
                     console.log(res.data);
@@ -64,7 +78,10 @@ const Form = ({ activity }) => {
                     return errorMessage;
                 });
         } else {
-            console.log('CREATION OUI');
+            data.latitude = location.latitude;
+            data.longitude = location.longitude;
+            console.log('********* CREATION **********', data);
+
             axios.post(`https://sportmate-develop.herokuapp.com/api/activity`, data, config)
                 .then(res => {
                     console.log(res.data);
@@ -94,6 +111,7 @@ const Form = ({ activity }) => {
     ]);
     const [itemSport, setItemSport] = useState([]);
     const MEDAL_IMAGE = require('../../../assets/img/medal.png')
+    let location: { longitude: string; latitude: string; };
 
     const foundDefaultRating = (activity) => {
         if (activity != null) {
@@ -121,6 +139,12 @@ const Form = ({ activity }) => {
 
     let defaultSport = foundDefaultSport(activity);
     useEffect(() => {
+        const mockFunction = (error) => {
+            if (error === 'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.') return console.warn(error)
+
+        }
+        console.error = mockFunction
+
         axios.get(`https://sportmate-develop.herokuapp.com/api/sports`)
             .then(res => {
                 console.log(res.data)
@@ -143,13 +167,16 @@ const Form = ({ activity }) => {
             setValue('activityLevel', activity.activityLevel, { shouldValidate: true })
             setValue('activityDate', activity.activityDate, { shouldValidate: true })
             setValue('address', activity.address, { shouldValidate: true })
-            if(activity.participant != null){
+            setValue('longitude', activity.longitude, { shouldValidate: true })
+            setValue('latitude', activity.latitude, { shouldValidate: true })
+            location = { "latitude": activity.latitude, "longitude": activity.longitude }
+            if (activity.participant != null) {
                 setValue('participant', activity.participant.toString(), { shouldValidate: true })
             }
             setValue('contact', activity.contact, { shouldValidate: true })
             setValue('isEvent', activity.isEvent, { shouldValidate: true })
-            // setItemSport(activity.sport)
         }
+
     }, [activity]);
 
     return (
@@ -170,7 +197,75 @@ const Form = ({ activity }) => {
                     name="activityName"
                 />
 
-                <TextLabel>Description: </TextLabel>
+                <ScrollView keyboardShouldPersistTaps={'handled'} >
+                    <TextLabel>Adresse: </TextLabel>
+                    {errors.address && <TextError>{errors.address.message}</TextError>}
+                    <Controller
+                        control={control}
+                        rules={{
+                            required: "L'adresse est obligatoire"
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <GooglePlacesAutocomplete
+                                keepResultsAfterBlur={true}
+                                GooglePlacesDetailsQuery={{ fields: "geometry" }}
+                                fetchDetails={true}
+                                placeholder='Recherche'
+                                onPress={(data, details = null) => {
+                                    onChange(data.description);
+                                    console.log(details?.geometry.location)
+                                    location = { "latitude": details?.geometry.location.lat, "longitude": details?.geometry.location.lng }
+                                }}
+                                enablePoweredByContainer={false}
+                                textInputProps={{
+                                    value: value,
+                                    onChangeText: (text) => {
+                                        onChange(text);
+                                    },
+                                    placeholderTextColor: '#B7B9BA'
+                                }}
+                                styles={{
+                                    placeholderTextColor: {
+                                        color: Colors.white
+                                    },
+                                    poweredContainer: {
+                                        backgroundColor: Colors.grey,
+                                        marginTop: 16,
+                                        padding: 10,
+                                    },
+                                    description: {
+                                        color: Colors.white,
+                                    },
+                                    textInput: {
+                                        margin: 16,
+                                        height: 40,
+                                        padding: 10,
+                                        backgroundColor: 'transparent',
+                                        borderWidth: 1,
+                                        borderColor: Colors.primary,
+                                        borderRadius: 8,
+                                        color: Colors.white
+                                    },
+                                    separator: {
+                                        backgroundColor: Colors.primary,
+                                    },
+                                    row: {
+                                        color: Colors.white,
+                                        backgroundColor: Colors.grey,
+                                    }
+                                }}
+                                onFail={error => console.log(error)}
+                                query={{
+                                    key: 'AIzaSyApy4skwItAoaqWRXmdtYjXMqpQADCkZog',
+                                    language: 'fr',
+                                }}
+                            />
+                        )}
+                        name="address"
+                    />
+                </ScrollView>
+
+                <Text style={formStyles.label}>Description: </Text>
                 <Controller
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
@@ -185,9 +280,9 @@ const Form = ({ activity }) => {
                 />
 
                 <View>
-                    <TextLabel>Sport: </TextLabel>
+                    <TextLabel>Sport:</TextLabel>
                     {errors.sport && <TextError>{errors.sport.message}</TextError>}
-                    <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Controller
                             control={control}
                             rules={{
@@ -195,16 +290,16 @@ const Form = ({ activity }) => {
                             }}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <RNPickerSelect
+                                    value={activity.sport}
+                                    itemKey={activity.sport}
                                     onValueChange={(sport) => {
                                         onChange(sport);
                                     }}
                                     items={itemSport}
                                     style={{ ...pickerSelectStyles }}
-                                    // value={"Vélo"}
-                                    // placeholder = {"Vélo"}
-                               />
+                                />
                             )}
-                             name="sport"
+                            name="sport"
                         />
 
                         <Controller
@@ -283,24 +378,6 @@ const Form = ({ activity }) => {
                         />
                     )}
                     name="activityDate"
-                />
-
-                <TextLabel>Lieu: </TextLabel>
-                {errors.address && <TextError>{errors.address.message}</TextError>}
-                <Controller
-                    control={control}
-                    rules={{
-                        required: "Le lieu est obligatoire"
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={formStyles.input}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                    )}
-                    name="address"
                 />
 
 
