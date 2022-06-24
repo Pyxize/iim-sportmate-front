@@ -58,7 +58,7 @@ export default class ListItems extends React.Component {
                     <View>
                         {
                             activities.map((item, i) => (
-                                <ListItem.Swipeable 
+                                <ListItem.Swipeable
                                     bottomDivider={true}
                                     // containerStyle={{ backgroundColor:'red'}}
                                     key={i}
